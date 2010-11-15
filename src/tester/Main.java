@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package test001;
+package tester;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -40,13 +40,12 @@ public class Main
 
         String baseURI = "";
 
-        r.read(model, in, baseURI) ;
+        r.read(model, in, baseURI);
 
         model.read(in, null);
 
-        in.close ();
+        in.close();
 
-// write it to standard out
         model.write(System.out);
     }
 }
