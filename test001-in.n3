@@ -11,5 +11,5 @@ msg:Message_1
     msg:command "put"^^xsd:string ;
     msg:args """:subject1 rdf:type auth:Authenticated ;
        rdfs:label \"subject1 теперь может аутентифицироваться\" ;
-       auth:login \"admin\";
-        auth:credential \"QL0AFWMIX8NRZTKeof9cXsvbvu8=\"."""^^xsd:string .
+       auth:login \"admin\" ;
+        auth:credential \"QL0AFWMIX8NRZTKeof9cXsvbvu8=\" ."""^^xsd:string .
