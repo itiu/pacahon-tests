@@ -9,7 +9,7 @@ msg:Message_1
     msg:ticket "12345-67-467-346534-546"^^xsd:string ;
     msg:reciever "pacahon"^^xsd:string ;
     msg:command "put"^^xsd:string ;
-    msg:args """:subject1 rdf:type auth:Authenticated ;
+    msg:args """auth:subject1 rdf:type auth:Authenticated ;
        rdfs:label \"subject1 теперь может аутентифицироваться\" ;
        auth:login \"admin\" ;
         auth:credential \"QL0AFWMIX8NRZTKeof9cXsvbvu8=\" ."""^^xsd:string .

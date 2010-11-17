@@ -1,12 +1,9 @@
-@prefix msg:     <http://gost19.org/message#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
-
-msg:Message_2
-    msg:in-reply-to msg:Message_1;
-    msg:sender "pacahon";
-    msg:reciever "external_tester" ;
-    msg:status "ok".
-
+@prefix msg:     <http://gost19.org/message#> .
+@prefix auth:     <http://gost19.org/auth#> .
+auth:subject1 rdf:type auth:Authenticated ;
+ rdfs:label "subject1 теперь может аутентифицироваться" ;
+ auth:login "admin" ;
+ auth:credential "QL0AFWMIX8NRZTKeof9cXsvbvu8=" .
