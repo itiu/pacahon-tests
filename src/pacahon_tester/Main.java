@@ -57,10 +57,17 @@ public class Main
 
     public static void main(String[] args) throws Exception
     {
+        String test_name = "test001";
+
+        if (args.length > 0)
+        {
+            test_name = args[0];
+        }
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        Model input_message = get_message_from_file("test001-in.n3");
-        Model output_message = get_message_from_file("test001-out.n3");
+        Model input_message = get_message_from_file(test_name + "-in.n3");
+        Model output_message = get_message_from_file(test_name + "-out.n3");
         Model result_message = null;
 
         input_message.write(baos, "N3");
@@ -82,12 +89,12 @@ public class Main
             s.send(data, 0);
             result = new String(s.recv(0));
 
-            BufferedWriter out = new BufferedWriter(new FileWriter("test001-recieve.n3"));
+            BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
             out.write(all_prefixs + result);
             out.close();
 
 
-            result_message = get_message_from_file("test001-recieve.n3");
+            result_message = get_message_from_file(test_name + "-recieve.n3");
         }
 
         long end = System.currentTimeMillis();
