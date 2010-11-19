@@ -9,6 +9,6 @@ msg:M123456-22
     msg:command msg:get_ticket ;
     msg:args
         [
-        auth:login "sender-login" ;
-        auth:credential "FdffeERtJjQ"
+        auth:login "admin" ;
+        auth:credential "QL0AFWMIX8NRZTKeof9cXsvbvu8="
         ] .
