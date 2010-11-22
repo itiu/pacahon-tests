@@ -55,6 +55,9 @@ public class Main
     }
     public final static String ns_full_rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public final static String ns_full_msg = "http://gost19.org/message#";
+
+    
+
     public final static String prefix_rdf = "@prefix rdf:     <" + ns_full_rdf + "> .";
     public final static String prefix_rdfs = "@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .";
     public final static String prefix_xsd = "@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .";
