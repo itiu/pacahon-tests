@@ -4,7 +4,7 @@
 
 msg:M123456-22
     rdf:type msg:Message ;
-    msg:sender "client1" ;
+    msg:sender "external_tester" ;
     msg:reciever "pacahon";
     msg:command msg:get_ticket ;
     msg:args
