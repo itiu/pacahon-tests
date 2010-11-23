@@ -108,7 +108,6 @@ public class Main
             out.write(all_prefixs + "\n" + result);
             out.close();
 
-
             // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
             result_message = get_message_from_file(test_name + "-recieve.n3").getGraph();
             if (cmp_results(input_message, result_message, output_message, null, null) == false)
@@ -116,20 +115,13 @@ public class Main
                 throw new Exception("result != ethalon");
             } else
             {
+                System.out.println("test [" + test_name + "] is passed");
             }
 
-
-//            ExtendedIterator<Triple> it = graph.find(null, Node.createURI(ns_msg + "reciever"), null);
-
-//            while (it.hasNext())
-//            {
-//                Triple tt = it.next();
-//                System.out.println(tt.toString());
-//            }
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("RES: (" + (end - start) + "[ms])\n" + result);
+        System.out.println("total time: (" + (end - start) + "[ms])");
 
     }
     private static Node input_subject = null;
