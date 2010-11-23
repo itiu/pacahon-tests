@@ -5,8 +5,9 @@
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
 msg:Message_2
-    msg:in-reply-to msg:Message_1;
-    msg:sender "pacahon";
+    rdf:type msg:Message ;
+    msg:in-reply-to msg:Message_1 ; 
+    msg:sender "pacahon" ;
     msg:reciever "external_tester" ;
-    msg:reason "все хорошо".
+    msg:reason "все хорошо" ;
     msg:status "ok".

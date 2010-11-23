@@ -1,0 +1,14 @@
+@prefix msg:     <http://gost19.org/message#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix auth:    <http://gost19.org/auth#> .
+
+msg:M123456-22
+    rdf:type msg:Message ;
+    msg:sender "external_tester" ;
+    msg:reciever "pacahon";
+    msg:command msg:get_ticket ;
+    msg:args
+        [
+        auth:login "admin" ;
+        auth:credential "QL0AFWMIX8NRZTKeof9cXsvbvu8="
+        ] .

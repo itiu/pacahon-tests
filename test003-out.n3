@@ -1,0 +1,16 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix msg:     <http://gost19.org/message#> .
+@prefix auth:     <http://gost19.org/auth#> .
+
+msg:M0000000000000  msg:in-reply-to  "{in@msg:subject}" ;
+  rdf:type msg:Message ;
+  msg:sender  "{in@msg:reciever}" ;
+  msg:reciever  "{in@msg:sender}" ;
+  msg:reason  "login и password совпадают" ;
+  msg:result
+  [
+     auth:ticket   "auth:$$$$$$$$-$$$$-$$$$-$$$$-$$$$$$$$$$$$"
+  ] ;
+  msg:status  "ok" .
