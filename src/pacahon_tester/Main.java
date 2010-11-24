@@ -10,7 +10,6 @@ import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
 import org.zeromq.ZMQ;
 
 /**
@@ -22,11 +21,6 @@ public class Main
 
     public static void main(String[] args) throws Exception
     {
-        Predicates.nsShort__nsFull = new HashMap<String, String>();
-
-        Predicates.nsShort__nsFull.put("rdf", Predicates.ns_full_rdf);
-        Predicates.nsShort__nsFull.put("msg", Predicates.ns_full_msg);
-        Predicates.nsShort__nsFull.put("auth", Predicates.ns_full_auth);
 
         String test_name = "test001";
 
@@ -35,7 +29,16 @@ public class Main
             test_name = args[0];
         }
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        /////////////////////////////////////////////////////////////////////////////
+        
+        String connectTo = "tcp://127.0.0.1:5555";
+//        String connectTo = "ipc://worker";
+        ZMQ.Context ctx = ZMQ.context(1);
+        ZMQ.Socket socket = ctx.socket(ZMQ.REQ);
+
+        socket.connect(connectTo);
+
+        /////////////////////////////////////////////////////////////////////////////
 
         Model m_input_message = utils.get_message_from_file(test_name + "-in.n3");
         Graph input_message = m_input_message.getGraph();
@@ -43,31 +46,33 @@ public class Main
 
         Graph result_message = null;
 
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         m_input_message.write(baos, "N3");
-
-        String connectTo = "tcp://127.0.0.1:5555";
-        ZMQ.Context ctx = ZMQ.context(1);
-        ZMQ.Socket s = ctx.socket(ZMQ.REQ);
-
-        s.connect(connectTo);
+        byte data[] = baos.toByteArray();
 
         long start = System.currentTimeMillis();
 
-        byte data[] = baos.toByteArray();
 
         String result = null;
 
         for (int i = 0; i < 1; i++)
         {
-            s.send(data, 0);
-            result = new String(s.recv(0));
+            long start_server_io = System.nanoTime();
 
-            //BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
-//            out.write(all_prefixs + "\n" + result);
-//            out.close();
+            socket.send(data, 0);
+
+            long start_recieve_time = System.nanoTime();
+
+            byte[] rr = socket.recv(0);
+            long end_server_io = System.nanoTime();
+
+            System.out.println("server i/o time : (" + (end_server_io - start_server_io) / 1000 + "[µs], recieve time = " + (end_server_io - start_recieve_time) / 1000 + "[µs])");
+
+            result = new String(rr);
+
 
             // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
-//            result_message = utils.get_message_from_file(test_name + "-recieve.n3").getGraph();
+
             result_message = utils.get_message_from_string(result).getGraph();
             if (cmp_results(input_message, result_message, output_message, null, null) == false)
             {
@@ -83,8 +88,14 @@ public class Main
         System.out.println("total time: (" + (end - start) + "[ms])");
 
     }
+
+    
     private static Node input_subject = null;
 
+
+    /*
+     * сравнение графа шаблона и графа результата
+     */
     public static boolean cmp_results(Graph input, Graph result, Graph ethalon, Node cur_result_subject, Node cur_ethalon_subject) throws Exception
     {
         if (cur_ethalon_subject == null)
@@ -210,8 +221,6 @@ public class Main
 
                 }
 
-
-
                 ExtendedIterator<Triple> it_res = null;
 
                 it_res = result.find(cur_result_subject, etnalon_triple.getPredicate(), null);
@@ -254,8 +263,6 @@ public class Main
                     }
                 }
 
-
-
                 if (isFound == false)
                 {
                     throw new Exception("[" + etnalon_triple.getPredicate() + "][" + eth_value + "] not found in result message");
@@ -264,9 +271,6 @@ public class Main
             }
 
         }
-
-
-
 
         return true;
     }
