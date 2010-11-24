@@ -8,14 +8,8 @@ import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.RDFReader;
-import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
 import java.util.HashMap;
 import org.zeromq.ZMQ;
 
@@ -26,49 +20,13 @@ import org.zeromq.ZMQ;
 public class Main
 {
 
-    private static Model get_message_from_file(String inputFileName) throws Exception
-    {
-        // create an empty model
-        Model message = ModelFactory.createDefaultModel();
-
-        // use the FileManager to find the input file
-        InputStream in = FileManager.get().open(inputFileName);
-        if (in == null)
-        {
-            throw new IllegalArgumentException(
-                    "File: " + inputFileName + " not found");
-        }
-
-        RDFReader r = message.getReader("N3");
-
-        String baseURI = "";
-
-        r.read(message, in, baseURI);
-
-        message.read(in, null);
-
-        in.close();
-
-        return message;
-    }
-    public final static String ns_full_rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    public final static String ns_full_msg = "http://gost19.org/message#";
-    public final static String ns_full_auth = "http://gost19.org/auth#";
-    public final static String prefix_rdf = "@prefix rdf:     <" + ns_full_rdf + "> .";
-    public final static String prefix_rdfs = "@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .";
-    public final static String prefix_xsd = "@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .";
-    public final static String prefix_msg = "@prefix msg:     <" + ns_full_msg + "> .";
-    public final static String prefix_auth = "@prefix auth:     <" + ns_full_auth + "> .";
-    public final static String all_prefixs = prefix_rdf + "\n" + prefix_rdfs + "\n" + prefix_xsd + "\n" + prefix_msg + "\n" + prefix_auth + "\n";
-    private static HashMap<String, String> nsShort__nsFull;
-
     public static void main(String[] args) throws Exception
     {
-        nsShort__nsFull = new HashMap<String, String>();
+        Predicates.nsShort__nsFull = new HashMap<String, String>();
 
-        nsShort__nsFull.put("rdf", ns_full_rdf);
-        nsShort__nsFull.put("msg", ns_full_msg);
-        nsShort__nsFull.put("auth", ns_full_auth);
+        Predicates.nsShort__nsFull.put("rdf", Predicates.ns_full_rdf);
+        Predicates.nsShort__nsFull.put("msg", Predicates.ns_full_msg);
+        Predicates.nsShort__nsFull.put("auth", Predicates.ns_full_auth);
 
         String test_name = "test001";
 
@@ -79,9 +37,9 @@ public class Main
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        Model m_input_message = get_message_from_file(test_name + "-in.n3");
+        Model m_input_message = utils.get_message_from_file(test_name + "-in.n3");
         Graph input_message = m_input_message.getGraph();
-        Graph output_message = get_message_from_file(test_name + "-out.n3").getGraph();
+        Graph output_message = utils.get_message_from_file(test_name + "-out.n3").getGraph();
 
         Graph result_message = null;
 
@@ -104,12 +62,13 @@ public class Main
             s.send(data, 0);
             result = new String(s.recv(0));
 
-            BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
-            out.write(all_prefixs + "\n" + result);
-            out.close();
+            //BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
+//            out.write(all_prefixs + "\n" + result);
+//            out.close();
 
             // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
-            result_message = get_message_from_file(test_name + "-recieve.n3").getGraph();
+//            result_message = utils.get_message_from_file(test_name + "-recieve.n3").getGraph();
+            result_message = utils.get_message_from_string(result).getGraph();
             if (cmp_results(input_message, result_message, output_message, null, null) == false)
             {
                 throw new Exception("result != ethalon");
@@ -130,7 +89,7 @@ public class Main
     {
         if (cur_ethalon_subject == null)
         {
-            ExtendedIterator<Triple> it = ethalon.find(null, Node.createURI(ns_full_rdf + "type"), Node.createURI(ns_full_msg + "Message"));
+            ExtendedIterator<Triple> it = ethalon.find(null, Node.createURI(Predicates.ns_full_rdf + "type"), Node.createURI(Predicates.ns_full_msg + "Message"));
 
             if (it.hasNext())
             {
@@ -141,7 +100,7 @@ public class Main
         }
         if (cur_result_subject == null)
         {
-            ExtendedIterator<Triple> it = result.find(null, Node.createURI(ns_full_rdf + "type"), Node.createURI(ns_full_msg + "Message"));
+            ExtendedIterator<Triple> it = result.find(null, Node.createURI(Predicates.ns_full_rdf + "type"), Node.createURI(Predicates.ns_full_msg + "Message"));
 
             if (it.hasNext())
             {
@@ -152,7 +111,7 @@ public class Main
         }
         if (input_subject == null)
         {
-            ExtendedIterator<Triple> it = input.find(null, Node.createURI(ns_full_rdf + "type"), Node.createURI(ns_full_msg + "Message"));
+            ExtendedIterator<Triple> it = input.find(null, Node.createURI(Predicates.ns_full_rdf + "type"), Node.createURI(Predicates.ns_full_msg + "Message"));
 
             if (it.hasNext())
             {
@@ -232,7 +191,7 @@ public class Main
                         eth_value = input_subject;
                     } else
                     {
-                        String template_src_value_name = prefix.replaceAll(prefix, nsShort__nsFull.get(prefix)) + qq[1];
+                        String template_src_value_name = prefix.replaceAll(prefix, Predicates.nsShort__nsFull.get(prefix)) + qq[1];
 
                         ExtendedIterator<Triple> it_template_src_value = input.find(null, Node.createURI(template_src_value_name), null);
 
