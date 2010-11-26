@@ -16,3 +16,4 @@ msg:Message_2
        rdfs:label \"subject12 - пользовательская учетка\" ;
        auth:login \"user\" ;
         auth:credential \"9cXsvbvu8=\" ."""^^xsd:string .
+

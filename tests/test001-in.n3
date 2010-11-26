@@ -18,3 +18,4 @@ msg:Message_1
        rdfs:label \"subject11 - админская учетка\" ;
        auth:login \"admin\" ;
         auth:credential \"QL0AFWMIX8NRZTKeof9cXsvbvu8=\" ."""^^xsd:string .
+

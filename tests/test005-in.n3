@@ -9,10 +9,11 @@
 msg:Message_2
     rdf:type msg:Message ;
     msg:sender "external_tester"^^xsd:string ;
-msg:ticket "auth:d3bdef03-72d7-4eda-8a63-30d26252ad1d" ;
+msg:ticket  "auth:cdf98057-02f8-43bc-bc5f-ffa09b540901" ;
     msg:reciever "pacahon"^^xsd:string ;
     msg:command "put"^^xsd:string ;
     msg:args """auth:subject12 rdf:type auth:Authenticated ;
        rdfs:label \"subject12 - пользовательская учетка\" ;
        auth:login \"user\" ;
         auth:credential \"9cXsvbvu8=\" ."""^^xsd:string .
+

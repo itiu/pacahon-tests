@@ -9,7 +9,9 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
 import org.zeromq.ZMQ;
 
 /**
@@ -29,8 +31,9 @@ public class Main
             test_name = args[0];
         }
 
+        System.out.println("TEST:" + test_name);
         /////////////////////////////////////////////////////////////////////////////
-        
+
         String connectTo = "tcp://127.0.0.1:5555";
 //        String connectTo = "ipc://worker";
         ZMQ.Context ctx = ZMQ.context(1);
@@ -73,13 +76,25 @@ public class Main
 
             // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
 
-            result_message = utils.get_message_from_string(result).getGraph();
-            if (cmp_results(input_message, result_message, output_message, null, null) == false)
+            try
             {
-                throw new Exception("result != ethalon");
-            } else
+                result_message = utils.get_message_from_string(result).getGraph();
+
+                BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
+                out.write(Predicates.all_prefixs + result);
+                out.close();
+
+                if (cmp_results(input_message, result_message, output_message, null, null) == false)
+                {
+                    throw new Exception("result != ethalon");
+                } else
+                {
+                    System.out.println("test [" + test_name + "] is passed");
+                }
+            } catch (Exception ex)
             {
-                System.out.println("test [" + test_name + "] is passed");
+                System.out.println("RES:\n" + result_message);
+                throw ex;
             }
 
         }
@@ -88,8 +103,6 @@ public class Main
         System.out.println("total time: (" + (end - start) + "[ms])");
 
     }
-
-    
     private static Node input_subject = null;
 
 

@@ -9,4 +9,7 @@ msg:M495B54ADC81DA  rdf:type  msg:Message ;
   msg:sender  "pacahon" ;
   msg:reciever  "external_tester" ;
   msg:status  "ok" ;
-  msg:reason  "добавление фактов выполнено" .
+  msg:reason  "добавление фактов выполнено:хотя пользователь не известен, однако операция CREATE допустима для ранее не существовавшего субьекта" .
+  
+  
+  
