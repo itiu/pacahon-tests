@@ -1,0 +1,14 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix msg:     <http://gost19.org/message#> .
+@prefix auth:     <http://gost19.org/auth#> .
+msg:M49659D0077BA7  rdf:type   msg:Message ;
+  msg:in-reply-to   msg:Message_6 ;
+  msg:sender   "pacahon" ;
+  msg:reciever   "external_tester" ;
+  msg:result   """auth:subject12  auth:login   \"user\" ;
+  rdfs:label   \"subject12 - пользовательская учетка\" .
+""" ;
+  msg:status   "ok" ;
+  msg:reason   "запрос выполнен" .

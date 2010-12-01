@@ -62,6 +62,8 @@ public class Main
         {
             long start_server_io = System.nanoTime();
 
+            System.out.println("SEND COMMAND TO SERVER");
+
             socket.send(data, 0);
 
             long start_recieve_time = System.nanoTime();
@@ -73,6 +75,7 @@ public class Main
 
             result = new String(rr);
 
+            System.out.println("OUT: \n" + result);
 
             // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
 
