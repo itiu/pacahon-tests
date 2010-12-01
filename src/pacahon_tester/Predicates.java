@@ -27,7 +27,7 @@ public class Predicates
     //
     public final static String all_prefixs = prefix_rdf + "\n" + prefix_rdfs + "\n" + prefix_xsd + "\n" + prefix_msg + "\n" + prefix_auth + "\n";
     //
-    public static HashMap<String, String> nsShort__nsFull;
+    public HashMap<String, String> nsShort__nsFull;
 
     Predicates()
     {

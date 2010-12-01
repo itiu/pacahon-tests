@@ -20,18 +20,11 @@ import org.zeromq.ZMQ;
  */
 public class Main
 {
+  private static Predicates predicates;
 
     public static void main(String[] args) throws Exception
     {
-
-        String test_name = "test001";
-
-        if (args.length > 0)
-        {
-            test_name = args[0];
-        }
-
-        System.out.println("TEST:" + test_name);
+        predicates = new Predicates ();
         /////////////////////////////////////////////////////////////////////////////
 
         String connectTo = "tcp://127.0.0.1:5555";
@@ -43,69 +36,76 @@ public class Main
 
         /////////////////////////////////////////////////////////////////////////////
 
-        Model m_input_message = utils.get_message_from_file(test_name + "-in.n3");
-        Graph input_message = m_input_message.getGraph();
-        Graph output_message = utils.get_message_from_file(test_name + "-out.n3").getGraph();
-
-        Graph result_message = null;
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        m_input_message.write(baos, "N3");
-        byte data[] = baos.toByteArray();
-
-        long start = System.currentTimeMillis();
-
-
-        String result = null;
-
-        for (int i = 0; i < 1; i++)
+        for (int ii = 0; ii < args.length; ii++)
         {
-            long start_server_io = System.nanoTime();
+            String test_name = args[ii];
+            System.out.println("\nTEST:" + test_name);
 
-            System.out.println("SEND COMMAND TO SERVER");
+            Model m_input_message = utils.get_message_from_file(test_name + "-in.n3");
+            Graph input_message = m_input_message.getGraph();
+            Graph output_message = utils.get_message_from_file(test_name + "-out.n3").getGraph();
 
-            socket.send(data, 0);
+            Graph result_message = null;
 
-            long start_recieve_time = System.nanoTime();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            m_input_message.write(baos, "N3");
+            byte data[] = baos.toByteArray();
 
-            byte[] rr = socket.recv(0);
-            long end_server_io = System.nanoTime();
+            long start = System.currentTimeMillis();
 
-            System.out.println("server i/o time : (" + (end_server_io - start_server_io) / 1000 + "[µs], recieve time = " + (end_server_io - start_recieve_time) / 1000 + "[µs])");
 
-            result = new String(rr);
+            String result = null;
 
-            System.out.println("OUT: \n" + result);
-
-            // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
-
-            try
+            for (int i = 0; i < 1; i++)
             {
-                result_message = utils.get_message_from_string(result).getGraph();
+                long start_server_io = System.nanoTime();
 
-                BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
-                out.write(Predicates.all_prefixs + result);
-                out.close();
+                System.out.println("SEND COMMAND TO SERVER");
 
-                if (cmp_results(input_message, result_message, output_message, null, null) == false)
+                socket.send(data, 0);
+
+                long start_recieve_time = System.nanoTime();
+
+                byte[] rr = socket.recv(0);
+                long end_server_io = System.nanoTime();
+
+                System.out.println("server i/o time : (" + (end_server_io - start_server_io) / 1000 + "[µs], recieve time = " + (end_server_io - start_recieve_time) / 1000 + "[µs])");
+
+                result = new String(rr);
+
+                System.out.println("OUT: \n" + result);
+
+                // сравниваем результаты полученные и результаты из шаблона xxxx-out.n3
+
+                try
                 {
-                    throw new Exception("result != ethalon");
-                } else
+                    result_message = utils.get_message_from_string(result).getGraph();
+
+                    BufferedWriter out = new BufferedWriter(new FileWriter(test_name + "-recieve.n3"));
+                    out.write(Predicates.all_prefixs + result);
+                    out.close();
+
+                    if (cmp_results(input_message, result_message, output_message, null, null) == false)
+                    {
+                        throw new Exception("result != ethalon");
+                    } else
+                    {
+                        System.out.println("test [" + test_name + "] is passed");
+                    }
+                } catch (Exception ex)
                 {
-                    System.out.println("test [" + test_name + "] is passed");
+                    System.out.println("RES:\n" + result_message);
+                    System.out.println("ETHALON:\n" + output_message);
+                    throw ex;
                 }
-            } catch (Exception ex)
-            {
-                System.out.println("RES:\n" + result_message);
-                throw ex;
+
             }
 
+            long end = System.currentTimeMillis();
+            System.out.println("total time: (" + (end - start) + "[ms])");
         }
-
-        long end = System.currentTimeMillis();
-        System.out.println("total time: (" + (end - start) + "[ms])");
-
     }
+    //
     private static Node input_subject = null;
 
 
@@ -172,6 +172,7 @@ public class Main
             Node eth_value = null;
             String eth_value_str = null;
             eth_value = etnalon_triple.getObject();
+            System.out.println ("eth_value="+eth_value);
 
             if (etnalon_triple.getObject().isLiteral() == false)
             {
@@ -218,7 +219,9 @@ public class Main
                         eth_value = input_subject;
                     } else
                     {
-                        String template_src_value_name = prefix.replaceAll(prefix, Predicates.nsShort__nsFull.get(prefix)) + qq[1];
+                        String full_prefix = predicates.nsShort__nsFull.get(prefix);
+                        System.out.println (tokens[1] + "[" + prefix + "] full_prefix=" + full_prefix);
+                        String template_src_value_name = prefix.replaceAll(prefix, full_prefix) + qq[1];
 
                         ExtendedIterator<Triple> it_template_src_value = input.find(null, Node.createURI(template_src_value_name), null);
 
@@ -281,7 +284,7 @@ public class Main
 
                 if (isFound == false)
                 {
-                    throw new Exception("[" + etnalon_triple.getPredicate() + "][" + eth_value + "] not found in result message");
+                    throw new Exception("ethalon P:[" + etnalon_triple.getPredicate() + "]=[" + eth_value + "] not found in result message");
 
                 }
             }

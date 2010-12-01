@@ -1,7 +1,1 @@
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test001
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test002
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test003
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test004
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test005
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test006
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test007
+java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test001 tests/test002 tests/test003 tests/test004 tests/test005 tests/test006 tests/test007
