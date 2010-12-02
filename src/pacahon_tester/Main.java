@@ -24,7 +24,7 @@ public class Main
         //      predicates = new Predicates();
         /////////////////////////////////////////////////////////////////////////////
 
-        String connectTo = "tcp://127.0.0.1:5555";
+        String connectTo = "tcp://172.17.4.64:5555";
 //        String connectTo = "ipc://worker";
         ZMQ.Context ctx = ZMQ.context(1);
         ZMQ.Socket socket = ctx.socket(ZMQ.REQ);

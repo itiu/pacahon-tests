@@ -1,0 +1,25 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix msg:     <http://gost19.org/message#> .
+@prefix auth:     <http://gost19.org/auth#> .
+
+msg:M49669D4D00D95  rdf:type   msg:Message ;
+  msg:in-reply-to   msg:M123456-22 ;
+  msg:sender   "pacahon" ;
+  msg:reciever   "external_tester" ;
+  msg:status   "ok" ;
+  msg:result
+  [
+     auth:ticket    "auth:78e27b8b-2712-4213-90cd-b5744f8753a0"
+  ] ;
+  msg:reason   "login и password совпадают" .
+
+msg:M49669D4D011F7  rdf:type   msg:Message ;
+  msg:in-reply-to   msg:Message_6 ;
+  msg:sender   "pacahon" ;
+  msg:reciever   "external_tester" ;
+  msg:result   """""" ;
+  msg:status   "ok" ;
+  msg:reason   "запрос выполнен" .
+
