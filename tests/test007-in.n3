@@ -22,7 +22,7 @@ msg:M123456-22
         auth:credential "9cXsvbvu8="
         ] .
 
-msg:Message_6
+msg:Message_7
     rdf:type msg:Message ;
     msg:sender "external_tester" ;
     msg:ticket  "@local" ;

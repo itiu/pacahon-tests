@@ -1,5 +1,5 @@
 # тест чтения ранее созданных триплетов,
-# ! выполняется не ранее test005, ! требует загруженных данных
+# ! выполняется не ранее test005 ! требует загруженных данных
 # 
 # шаблон для выборки в виде одноуровневого графа
 # query:get - обозначает что будет возвращено значение соответствующего предиката 
@@ -11,7 +11,7 @@
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix auth:    <http://gost19.org/auth#> .
 
-msg:M123456-22
+msg:Message_9
     rdf:type msg:Message ;
     msg:sender "external_tester" ;
     msg:reciever "pacahon";
@@ -22,12 +22,12 @@ msg:M123456-22
         auth:credential "9cXsvbvu8="
         ] .
 
-msg:Message_8
+msg:Message_0
     rdf:type msg:Message ;
     msg:sender "external_tester" ;
     msg:ticket  "@local" ;
     msg:reciever "pacahon" ;
     msg:command "get" ;
-    msg:args """zdb:doc_44523b77-c109-4d39-b75d-f0833c85c15d swrc:name query:get ;
-       gost19:parentDepartment query:get .""" .
-
+    msg:args """query:any swrc:firstName query:get ;
+	docs19:position query:get ;
+       swrc:firstName "[Андрей, Роман]"  .""" .
