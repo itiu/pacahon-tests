@@ -1,0 +1,34 @@
+# тест чтения ранее созданных триплетов,
+# ! выполняется не ранее test005 ! требует загруженных данных
+# 
+# шаблон для выборки в виде одноуровневого графа
+# query:get - обозначает что будет возвращено значение соответствующего предиката 
+# 
+
+@prefix msg:     <http://gost19.org/message#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix auth:    <http://gost19.org/auth#> .
+
+msg:Message_9
+    rdf:type msg:Message ;
+    msg:sender "external_tester" ;
+    msg:reciever "pacahon";
+    msg:command "get_ticket" ;
+    msg:args
+        [
+        auth:login "user" ;
+        auth:credential "9cXsvbvu8="
+        ] .
+
+msg:Message_0
+    rdf:type msg:Message ;
+    msg:sender "external_tester" ;
+    msg:ticket  "@local" ;
+    msg:reciever "pacahon" ;
+    msg:command "get" ;
+    msg:args """
+    query:any  a  docs19:organization_card ;
+    gost19:externalIdentifer query:get ;
+    swrc:name query:get .""" .
