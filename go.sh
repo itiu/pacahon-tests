@@ -1,1 +1,1 @@
-java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test011
+java -Djava.library.path=/usr/local/lib -jar "dist/tester.jar" tests/test012
