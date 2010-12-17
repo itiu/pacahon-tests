@@ -32,6 +32,6 @@ msg:Message_0
     msg:args """
     query:any a  docs19:employee_card ;
     query:fulltext "^кар,^ром" ;
-    docs19:department query:get_and_reifed_data;
+    docs19:department query:get_reifed ;
     swrc:firstName query:get ;
     swrc:lastName query:get .""" .
