@@ -24,7 +24,8 @@ public class Main
         //      predicates = new Predicates();
         /////////////////////////////////////////////////////////////////////////////
 
-        String connectTo = "tcp://172.17.4.64:5555";
+        String defaultConnectTo="tcp://127.0.0.1:5555";
+        String connectTo = args[0];
 //        String connectTo = "ipc://worker";
         ZMQ.Context ctx = ZMQ.context(1);
         ZMQ.Socket socket = ctx.socket(ZMQ.REQ);
@@ -33,7 +34,7 @@ public class Main
 
         /////////////////////////////////////////////////////////////////////////////
 
-        for (int ii = 0; ii < args.length; ii++)
+        for (int ii = 1; ii < args.length; ii++)
         {
             String test_name = args[ii];
             System.out.println("\nTEST:" + test_name);
