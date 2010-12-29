@@ -1,0 +1,37 @@
+[
+	{
+		"#" :
+		{
+			"msg" : "http://gost19.org/message#",
+			"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+			"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+			"xsd" : "http://www.w3.org/2001/XMLSchema#",
+			"auth" : "http://www.gost19.org/auth#"
+		},
+		"@" : "msg:M11F2090E1C76F74A",
+		"a" : "msg:Message",
+		"msg:in-reply-to" : "msg:M123456_22",
+		"msg:sender" : "pacahon^^xsd:string",
+		"msg:reciever" : "external_tester^^xsd:string",
+		"msg:status" : "ok^^xsd:string",
+		"msg:result" : { "auth:ticket" : "<auth:54294af6-0505-41b2-bb4d-2e501b6ee112>" },
+		"msg:reason" : "login и password совпадают^^xsd:string"
+	},
+	{
+		"#" :
+		{
+			"msg" : "http://gost19.org/message#",
+			"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+			"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+			"xsd" : "http://www.w3.org/2001/XMLSchema#",
+			"auth" : "http://www.gost19.org/auth#"
+		},
+		"@" : "msg:M11F2090E1C95DF27",
+		"a" : "msg:Message",
+		"msg:in-reply-to" : "msg:Message_2",
+		"msg:sender" : "pacahon^^xsd:string",
+		"msg:reciever" : "external_tester^^xsd:string",
+		"msg:status" : "ok^^xsd:string",
+		"msg:reason" : "добавление фактов выполнено:пользователь известен, охраняемый субьект отсутствует в хранилище^^xsd:string"
+	}
+]

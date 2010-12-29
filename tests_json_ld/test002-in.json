@@ -1,0 +1,24 @@
+{
+	"#" : 
+	{
+		"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+		"xsd" : "http://www.w3.org/2001/XMLSchema#",
+		"msg" : "http://gost19.org/message#",
+		"auth" : "http://gost19.org/auth#"
+	},
+	"@" : "msg:Message_2",
+	"a" : "msg:Message",
+	"msg:sender" : "external_tester^^xsd:string",
+    "msg:ticket" : "12345-67-467-346534-546^^xsd:string",
+    "msg:reciever" : "pacahon^^xsd:string",
+    "msg:command" : "put^^xsd:string",
+    "msg:args" : 
+    {
+		"@" : "auth:admin1",
+		"a" : "auth:Authenticated",
+	    "rdfs:label" : "admin1 - админская учетка^^xsd:string",
+	    "auth:login" : "admin^^xsd:string",
+	    "auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8=^^xsd:string"
+	}
+}

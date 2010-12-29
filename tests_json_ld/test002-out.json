@@ -1,0 +1,17 @@
+{
+	"#" : 
+	{
+		"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+		"xsd" : "http://www.w3.org/2001/XMLSchema#",
+		"msg" : "http://gost19.org/message#",
+		"auth" : "http://gost19.org/auth#"
+	},
+	"@" : "msg:M495B4BD0647E5",
+	"a" : "msg:Message",
+	"msg:in-reply-to" : "<msg:Message_2>",
+	"msg:sender" : "pacahon^^xsd:string",
+	"msg:reciever" : "external_tester^^xsd:string",
+	"msg:status" : "fail^^xsd:string",
+  	"msg:reason" : "добавление фактов не возможно: пользователь не известен, охраняемый субьект уже есть, все операции запрещены^^xsd:string"
+}
