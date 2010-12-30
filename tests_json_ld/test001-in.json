@@ -7,7 +7,6 @@
       "xsd" : "http://www.w3.org/2001/XMLSchema#",
       "auth" : "http://www.gost19.org/auth#"
     },
-    "@" : "msg:Message_1",
     "a" : "msg:Message",
     "msg:sender" : "external_tester^^xsd:string",
     "msg:ticket" : "12345-67-467-346534-546^^xsd:string",
@@ -20,5 +19,6 @@
 	"rdfs:label" : "admin1 - админская учетка^^xsd:string",
 	"auth:login" : "admin^^xsd:string",
 	"auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8=^^xsd:string"
-    }
+    },
+    "@" : "msg:Message_1"
 }

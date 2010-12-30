@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import zmq
 
 def main(file_name):
@@ -20,7 +22,7 @@ def main(file_name):
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print "usage: prompt.py <addr>"
+        print "usage: pacahon_tester.py <filename.json>"
         raise SystemExit
     main(sys.argv[1])
 
