@@ -1,0 +1,9 @@
+{
+	"@" : "msg:M11F7ECEBB6124B13",
+	"rdf:type" : "msg:Message",
+	"msg:in-reply-to" : "msg:Message_2",
+	"msg:sender" : "pacahon",
+	"msg:reciever" : "external_tester",
+	"msg:status" : "fail",
+	"msg:reason" : "добавление фактов не возможно: пользователь не известен, охраняемый субьект уже есть, все операции запрещены"
+}
