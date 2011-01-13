@@ -15,9 +15,9 @@
 		"msg:reciever" : "external_tester^^xsd:string",
 		"msg:status" : "ok^^xsd:string",
 		"msg:result" : 
-			{ 
-			    "auth:ticket" : "auth:3ce847bb-67d0-4387-b857-f5312e82e1c4" 
-			},
+		    { 
+			"auth:ticket" : "auth:3ce847bb-67d0-4387-b857-f5312e82e1c4" 
+		    },
 		"msg:reason" : "login и password совпадают^^xsd:string"
 	},
 	{
@@ -37,10 +37,7 @@
 		"msg:status" : "ok^^xsd:string",
 		"msg:result" : 
 		{
-			"@" : "auth:subject12",
-			"auth:login" : "user^^xsd:string",
-  			"rdfs:label" : "subject12 - пользовательская учетка^^xsd:string"
   		},
-  		"msg:reason" : "запрос выполнен^^xsd:string"
+  		"msg:reason" : "запрос выполнен"
 	}
 ]
