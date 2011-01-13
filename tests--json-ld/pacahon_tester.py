@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# dependency:  http://github.com/bradleypallen/json_ld_processor
+
 import zmq, json_ld_processor as jlp
 
 

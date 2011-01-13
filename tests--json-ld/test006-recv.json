@@ -1,6 +1,6 @@
 [
 {
-"@" : "msg:M11F8714419CF05B6",
+"@" : "msg:M11F874D8AAEE9A68",
 "a" : "msg:Message",
 "msg:in-reply-to" : "msg:M123456_22",
 "msg:sender" : "pacahon",
@@ -8,12 +8,12 @@
 "msg:status" : "ok",
 "msg:result" : 
 	{
-		"auth:ticket" : "auth:ddf4e4b2-131e-4196-bd40-38b9b0a952f7"
+		"auth:ticket" : "auth:0a8fe88a-29e9-4e8f-a2a9-2dea578cb3d6"
 	},
 "msg:reason" : "login и password совпадают"
 },
 {
-"@" : "msg:M11F87144215CA481",
+"@" : "msg:M11F874D8AB013C5D",
 "a" : "msg:Message",
 "msg:in-reply-to" : "msg:Message_6",
 "msg:sender" : "pacahon",
