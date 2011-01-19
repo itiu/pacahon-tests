@@ -37,8 +37,8 @@
 		"msg:args" :  
 	    {
 			"@" : "auth:subject12",
-			"rdfs:label" : "query:get^^xsd:string",
-			"auth:login" : "query:get^^xsd:string"
+			"auth:login" : "query:get^^xsd:string",
+			"rdfs:label" : "query:get"
 	    }
 	}
 ]
