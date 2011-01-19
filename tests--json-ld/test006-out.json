@@ -1,18 +1,10 @@
 [
 	{
-		"#" :
-		{
-			"msg" : "http://gost19.org/message#",
-			"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-			"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
-			"xsd" : "http://www.w3.org/2001/XMLSchema#",
-			"auth" : "http://www.gost19.org/auth#"
-		},
 		"@" : "msg:M49669C518DBC1",
 		"a" : "msg:Message",
 		"msg:in-reply-to" : "msg:M123456_22",
-		"msg:sender" : "pacahon^^xsd:string",
-		"msg:reciever" : "external_tester^^xsd:string",
+		"msg:sender" : "pacahon",
+		"msg:reciever" : "external_tester",
 		"msg:status" : "ok^^xsd:string",
 		"msg:result" : 
 			{ 
@@ -21,26 +13,18 @@
 		"msg:reason" : "login и password совпадают^^xsd:string"
 	},
 	{
-		"#" :
-		{
-			"msg" : "http://gost19.org/message#",
-			"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-			"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
-			"xsd" : "http://www.w3.org/2001/XMLSchema#",
-			"auth" : "http://www.gost19.org/auth#"
-		},
 		"@" : "msg:M49669C518E175",
 		"a" : "msg:Message",
 		"msg:in-reply-to" : "msg:Message_6",
-		"msg:sender" : "pacahon^^xsd:string",
-		"msg:reciever" : "external_tester^^xsd:string",
+		"msg:sender" : "pacahon",
+		"msg:reciever" : "external_tester",
 		"msg:status" : "ok^^xsd:string",
 		"msg:result" : 
 		{
 			"@" : "auth:subject12",
-			"auth:login" : "user^^xsd:string",
-  			"rdfs:label" : "subject12 - пользовательская учетка^^xsd:string"
+			"auth:login" : "user",
+  			"rdfs:label" : "subject12 - пользовательская учетка"
   		},
-  		"msg:reason" : "запрос выполнен^^xsd:string"
+  		"msg:reason" : "запрос выполнен"
 	}
 ]

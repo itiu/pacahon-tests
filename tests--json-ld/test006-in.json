@@ -1,43 +1,27 @@
 [
 	{
-		"#" :
-		{
-			"msg" : "http://gost19.org/message#",
-			"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-			"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
-			"xsd" : "http://www.w3.org/2001/XMLSchema#",
-			"auth" : "http://www.gost19.org/auth#"
-		},
 		"@" : "msg:M123456_22",
 		"a" : "msg:Message",
-		"msg:sender" : "external_tester^^xsd:string",
-		"msg:reciever" : "pacahon^^xsd:string",
-		"msg:command" : "get_ticket^^xsd:string",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
+		"msg:command" : "get_ticket",
 		"msg:args" :  
 	    {
-			"auth:login" : "admin^^xsd:string",
-	        "auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8=^^xsd:string"
+			"auth:login" : "admin",
+	        "auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8="
 	    }
 	},
 	{
-		"#" :
-		{
-			"msg" : "http://gost19.org/message#",
-			"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-			"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
-			"xsd" : "http://www.w3.org/2001/XMLSchema#",
-			"auth" : "http://www.gost19.org/auth#"
-		},
 		"@" : "msg:Message_6",
 		"a" : "msg:Message",
-		"msg:sender" : "external_tester^^xsd:string",
-		"msg:reciever" : "pacahon^^xsd:string",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
 		"msg:ticket" : "@local",
-		"msg:command" : "get^^xsd:string",
+		"msg:command" : "get",
 		"msg:args" :  
 	    {
 			"@" : "auth:subject12",
-			"auth:login" : "query:get^^xsd:string",
+			"auth:login" : "query:get",
 			"rdfs:label" : "query:get"
 	    }
 	}
