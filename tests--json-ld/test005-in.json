@@ -7,7 +7,7 @@
 		"msg:command" : "set_message_trace",
 		"msg:args" :  
 	    {
-			"pacahon:on-trace-msg" : "10",
+			"pacahon:on-trace-msg":["41","11"],
 	    		"pacahon:off-trace-msg" : "36"
 	    }
 	

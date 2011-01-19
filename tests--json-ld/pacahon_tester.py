@@ -34,7 +34,7 @@ def main(name_test):
 
     print "Connecting to: ", addr        
 
-    s.send(msg_in + '\0', copy=False)
+    s.send(msg_in, copy=False)
     msg_out_recv = s.recv(copy=False)
     
     f = open (name_test + "-recv.json", 'w')
