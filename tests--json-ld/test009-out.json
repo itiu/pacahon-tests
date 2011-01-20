@@ -1,0 +1,30 @@
+[
+	{
+		"@" : "msg:M49669C518DBC1",
+		"a" : "msg:Message",
+		"msg:in-reply-to" : "msg:M123456_22",
+		"msg:sender" : "pacahon",
+		"msg:reciever" : "external_tester",
+		"msg:status" : "ok^^xsd:string",
+		"msg:result" : 
+			{ 
+			    "auth:ticket" : "auth:3ce847bb-67d0-4387-b857-f5312e82e1c4" 
+			},
+		"msg:reason" : "login и password совпадают^^xsd:string"
+	},
+	{
+		"@" : "msg:M49669C518E175",
+		"a" : "msg:Message",
+		"msg:in-reply-to" : "msg:Message_6",
+		"msg:sender" : "pacahon",
+		"msg:reciever" : "external_tester",
+		"msg:status" : "ok^^xsd:string",
+		"msg:result" : 
+		{
+			"@" : "auth:subject12",
+			"auth:login" : "user",
+  			"rdfs:label" : "subject12 - пользовательская учетка"
+  		},
+  		"msg:reason" : "запрос выполнен"
+	}
+]
