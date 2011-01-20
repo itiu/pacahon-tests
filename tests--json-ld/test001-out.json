@@ -1,17 +1,9 @@
 {
-	"#" : 
-	{
-		"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-		"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
-		"xsd" : "http://www.w3.org/2001/XMLSchema#",
-		"msg" : "http://gost19.org/message#",
-		"auth" : "http://gost19.org/auth#"
-	},
 	"@" : "msg:M495B54ADC81DA",
 	"a" : "msg:Message",
-	"msg:in-reply-to" : "<msg:Message_1>",
-	"msg:sender" : "pacahon^^xsd:string",
-	"msg:reciever" : "external_tester^^xsd:string",
-	"msg:status" : "ok^^xsd:string",
-  	"msg:reason" : "добавление фактов выполнено:хотя пользователь не известен, однако операция CREATE допустима для ранее не существовавшего субьекта^^xsd:string"
+	"msg:in-reply-to" : "msg:Message_1",
+	"msg:sender" : "pacahon",
+	"msg:reciever" : "external_tester",
+	"msg:status" : "ok",
+  	"msg:reason" : "добавление фактов выполнено:хотя пользователь не известен, однако операция CREATE допустима для ранее не существовавшего субьекта"
 }

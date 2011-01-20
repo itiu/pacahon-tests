@@ -1,0 +1,89 @@
+[
+	{
+		"@" : "msg:M123456_0",
+		"a" : "msg:Message",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
+		"msg:command" : "set_message_trace",
+		"msg:args" :  
+		    {
+			"pacahon:on-trace-msg":"-"
+		    }
+	
+	},	
+	{
+		"@" : "msg:M123456_22",
+		"a" : "msg:Message",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
+		"msg:command" : "get_ticket",
+		"msg:args" :  
+		    {
+			"auth:login" : "admin",
+	    		"auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8="
+		    }
+	},
+	{
+		"@" : "msg:Message_2",
+		"a" : "msg:Message",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
+		"msg:ticket" : "@local",
+		"msg:command" : "put",
+		"msg:args" :  
+		[
+		    {
+			"@" : "test:doc_375c91f5-6c67-4137-bdf1-fe573bad8993_add_info_1295014543316",
+			"a" : "rdf:Statement",
+			"rdf:object" : "zdb:dep_90900000",
+			"rdf:predicate" : "docs19:department",
+			"rdf:subject" : "zdb:doc_375c91f5-6c67-4137-bdf1-fe573bad8993",
+			"swrc:name" : "Группа разработки прикладного ПО"
+		    },
+		    {
+			"@" : "test:person_375c91f5-6c67-4137-bdf1-fe573bad8993",
+			"a" : "swrc:Employee",
+			"gost19:active" : "true"
+		    },
+		    {
+			"@" : "test:doc_375c91f5-6c67-4137-bdf1-fe573bad8993",
+			"a" : "docs19:employee_card",
+			"gost19:active" : "true",
+			"gost19:employee" : "zdb:person_375c91f5-6c67-4137-bdf1-fe573bad8993",
+			"gost19:middleName" : "Константинович",
+			"docs19:department" : "zdb:dep_90900000",
+			"docs19:position" : "Специалист",
+			"swrc:email" : "roman.karpov@mgroup.com",
+			"swrc:firstName" : "Роман",
+			"swrc:lastName" : "Карпов",
+			"swrc:phone" : "99-66"
+		    },
+		    {
+			"@" : "test:doc_475c91f5-6c67-4137-bdf1-fe573bad8993_add_info_1295014543316",
+			"a" : "rdf:Statement",
+			"rdf:object" : "zdb:dep_90900000",
+			"rdf:predicate" : "docs19:department",
+			"rdf:subject" : "zdb:doc_375c91f5-6c67-4137-bdf1-fe573bad8993",
+			"swrc:name" : "Группа разработки прикладного ПО"
+		    },
+		    {
+			"@" : "test:person_475c91f5-6c67-4137-bdf1-fe573bad8993",
+			"a" : "swrc:Employee",
+			"gost19:active" : "true"
+		    },
+		    {
+			"@" : "test:doc_475c91f5-6c67-4137-bdf1-fe573bad8993",
+			"a" : "docs19:employee_card",
+			"gost19:active" : "true",
+			"gost19:employee" : "zdb:person_475c91f5-6c67-4137-bdf1-fe573bad8993",
+			"gost19:middleName" : "Иванович",
+			"docs19:department" : "zdb:dep_90900000",
+			"docs19:position" : "Специалист",
+			"swrc:email" : "roman.petrov@mgroup.com",
+			"swrc:firstName" : "Роман",
+			"swrc:lastName" : "Петров",
+			"swrc:phone" : "99-66"
+		    }
+		]
+	}
+]
