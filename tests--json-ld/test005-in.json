@@ -1,18 +1,5 @@
 [
 	{
-		"@" : "msg:M123456_0",
-		"a" : "msg:Message",
-		"msg:sender" : "external_tester",
-		"msg:reciever" : "pacahon",
-		"msg:command" : "set_message_trace",
-		"msg:args" :  
-	    {
-			"pacahon:on-trace-msg":"*",
-	    		"pacahon:off-trace-msg" : ["136", "241"]
-	    }
-	
-	},	
-	{
 		"@" : "msg:M123456_22",
 		"a" : "msg:Message",
 		"msg:sender" : "external_tester^^xsd:string",

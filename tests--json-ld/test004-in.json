@@ -1,12 +1,5 @@
+[
 {
-	"#" :
-	{
-		"msg" : "http://gost19.org/message#",
-		"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-		"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
-		"xsd" : "http://www.w3.org/2001/XMLSchema#",
-		"auth" : "http://www.gost19.org/auth#"
-	},
 	"@" : "msg:M123456_22",
 	"a" : "msg:Message",
 	"msg:sender" : "external_tester^^xsd:string",
@@ -18,3 +11,4 @@
         "auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8r=^^xsd:string"
     }
 }
+]
