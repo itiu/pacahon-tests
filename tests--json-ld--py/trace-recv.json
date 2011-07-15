@@ -1,0 +1,11 @@
+[
+{
+"@" : "msg:M_8CE104F354ABC77",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_0",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:reason" : ""
+}
+] 

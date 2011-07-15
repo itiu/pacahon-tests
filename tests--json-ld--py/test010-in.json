@@ -1,0 +1,28 @@
+[
+	{
+		"@" : "msg:M123456_22",
+		"a" : "msg:Message",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
+		"msg:command" : "get_ticket",
+		"msg:args" :  
+		{
+			"auth:login" : "admin",
+	        "auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8="
+		}
+	},
+	{
+		"@" : "msg:Message_6",
+		"a" : "msg:Message",
+		"msg:sender" : "external_tester",
+		"msg:reciever" : "pacahon",
+		"msg:ticket" : "@local",
+		"msg:command" : "get",
+		"msg:args" :
+		{
+    			"@" : "query:any",
+			"dc:identifier" : "[ee2e17923df24377aaa679efe67ee3a7,d3b97291764d49adacb8aecfe67bbd7e,2418fb888b8d48f88fe56e34d1a10018]",
+			"a" : "query:get"
+		}
+	}
+]

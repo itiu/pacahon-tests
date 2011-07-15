@@ -1,0 +1,49 @@
+[
+{
+"@" : "msg:M1213899B8763DF9A",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_22",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:result" : 
+	{
+	 	 "auth:ticket" : "auth:09ea1a07-4ef7-4e77-ae9b-ea29d7faff81"
+	},
+"msg:reason" : "login и password совпадают"
+},
+{
+"@" : "msg:M1213899B879EC59D",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:Message_6",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:result" : [
+	{
+	 "@" : "zdb:doc_d3b97291764d49adacb8aecfe67bbd7e",
+	 "a" : ["docs:Document","user_onto:template_5ef02f55b19043378f8732312b31d7a6_v_1"]
+	},
+	{
+	 "@" : "zdb:doc_2418fb888b8d48f88fe56e34d1a10018",
+	 "a" : ["user_onto:template_d11918ccc19d46e2807bad919bdfa218_v_4","docs:Document"]
+	},
+	{
+	 "@" : "zdb:doc_d3b97291764d49adacb8aecfe67bbd7e_v_1",
+	 "a" : ["docs:Document","user_onto:template_5ef02f55b19043378f8732312b31d7a6_v_1"]
+	},
+	{
+	 "@" : "zdb:doc_2418fb888b8d48f88fe56e34d1a10018_v_1",
+	 "a" : ["user_onto:template_d11918ccc19d46e2807bad919bdfa218_v_4","docs:Document"]
+	},
+	{
+	 "@" : "zdb:doc_ee2e17923df24377aaa679efe67ee3a7",
+	 "a" : ["docs:Document","user_onto:template_5ef02f55b19043378f8732312b31d7a6_v_1"]
+	},
+	{
+	 "@" : "zdb:doc_ee2e17923df24377aaa679efe67ee3a7_v_1",
+	 "a" : ["docs:Document","user_onto:template_5ef02f55b19043378f8732312b31d7a6_v_1"]
+	}],
+"msg:status" : "ok",
+"msg:reason" : "запрос выполнен"
+}
+]

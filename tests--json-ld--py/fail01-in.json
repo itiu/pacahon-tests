@@ -1,0 +1,16 @@
+[
+{
+"@" : "msg:Mfc25f9cc-1d9e-455a-939c-dd9ff2f59f6e",
+"msg:reciever" : "pacahon",
+"a" : "msg:Message",
+"msg:ticket" : "auth:1c16b81e-9501-4003-80f5-ed1075ff41b2",
+"msg:sender" : "ORG Synchronizer:updateOrganizationEntity:getAsJSONArray",
+"msg:command" : "get",
+"msg:args" : [
+        {
+         "@" : "zdb:doc_6cb18425-19dd-45fc-8d2d-f7ab24d45ec0",
+         "query:all_predicates" : "query:get_reifed"
+        }]
+}
+
+]

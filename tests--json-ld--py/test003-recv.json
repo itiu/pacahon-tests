@@ -1,0 +1,15 @@
+[
+{
+"@" : "msg:M_8CDFA489D7C55FC",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_22",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:result" : 
+	{
+	 	 "auth:ticket" : "auth:7c15dae8-4d25-439a-bc09-444c10224106"
+	},
+"msg:reason" : "login и password совпадают"
+}
+]

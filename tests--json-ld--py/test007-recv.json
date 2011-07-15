@@ -1,0 +1,28 @@
+[
+{
+"@" : "msg:M_8CDFA489DBC4368",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_22",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:result" : 
+	{
+	 	 "auth:ticket" : "auth:aa808a85-2729-4c07-9443-f94960fcb1f4"
+	},
+"msg:reason" : "login и password совпадают"
+},
+{
+"@" : "msg:M_8CDFA489DBCA36D",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:Message_6",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:result" : [
+	{
+	 
+	}],
+"msg:status" : "ok",
+"msg:reason" : "запрос выполнен: ни один из найденных субьектов, не был успешно авторизован:пользователь известен, но не является создателем данного субьекта"
+}
+]

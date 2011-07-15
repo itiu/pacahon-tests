@@ -1,0 +1,30 @@
+[
+{
+"@" : "msg:M_8CDFA489DDBEE85",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_22",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:result" : 
+	{
+	 	 "auth:ticket" : "auth:0f4772e8-f3ae-43f2-a037-d4810dee0f85"
+	},
+"msg:reason" : "login и password совпадают"
+},
+{
+"@" : "msg:M_8CDFA489DDC4EB1",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:Message_6",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:result" : [
+	{
+	 "@" : "test:doc_575c91f5-6c67-4137-bdf1-fe573bad8993",
+	 "swrc:firstName" : "Роман",
+	 "swrc:lastName" : "Петров"
+	}],
+"msg:status" : "ok",
+"msg:reason" : "запрос выполнен: авторизованны все найденные субьекты"
+}
+]

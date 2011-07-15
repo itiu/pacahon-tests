@@ -1,0 +1,24 @@
+[
+{
+"@" : "msg:M_8CDFA489DCC10B7",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_22",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:result" : 
+	{
+	 	 "auth:ticket" : "auth:2a4d4bef-d850-4cff-8264-5748c5e0e52e"
+	},
+"msg:reason" : "login и password совпадают"
+},
+{
+"@" : "msg:M_8CDFA489DCC6E6A",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:Message_2",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "ok",
+"msg:reason" : "добавление фактов выполнено:пользователь известен, он создатель данного субьекта"
+}
+]

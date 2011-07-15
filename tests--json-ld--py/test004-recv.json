@@ -1,0 +1,15 @@
+[
+{
+"@" : "msg:M_8CDFA489D8B8CE7",
+"a" : "msg:Message",
+"msg:in-reply-to" : "msg:M123456_22",
+"msg:sender" : "pacahon",
+"msg:reciever" : "external_tester",
+"msg:status" : "fail",
+"msg:result" : 
+	{
+	 
+	},
+"msg:reason" : "нет причин для выдачи сессионного билета"
+}
+]
