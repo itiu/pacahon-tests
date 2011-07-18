@@ -1,7 +1,10 @@
 утилиты для внешнего тестирования агента pacahon
 
 ext_pacahon_test : утилита для многопоточного тестирования pacahon
-    требует: golang, zmq, gozmq
+    требует: zmq, gozmq
+	goinstall github.com/dchest/uuid.go
+	goinstall github.com/alecthomas/gozmq
+	
     сборка: make
 
 

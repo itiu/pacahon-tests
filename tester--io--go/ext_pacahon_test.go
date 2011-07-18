@@ -10,7 +10,7 @@ import "json"
 import "log"
 import "time"
 
-import "uuid"
+import uuid "github.com/dchest/uuid.go"
 
 type IOElement struct {
 	in_msg  string
@@ -42,10 +42,9 @@ func main() {
 		// стартуем тестирующие нити
 		c := make(chan *IOElement)
 
-		go ggg(c)
-		go ggg(c)
-		go ggg(c)
-		go ggg(c)
+		for thrd := 0; thrd < 100; thrd++ {
+		    go ggg(c)
+		 }
 
 		// выбираем данные для тестирующих нитей 
 
@@ -148,7 +147,7 @@ func ggg(c chan *IOElement) {
 	ticket := get_ticket(socket, "user", "9cXsvbvu8=")
 
 	fmt.Println("ggg is waiting...")
-	time.Sleep(5 * 1e9)
+	time.Sleep(50 * 1e9)
 
 	fmt.Println("ggg read chanel")
 
