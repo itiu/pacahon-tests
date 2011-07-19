@@ -9,6 +9,7 @@ import "bufio"
 import "json"
 import "log"
 import "time"
+import "flag" // command line option parser
 
 import uuid "github.com/dchest/uuid.go"
 
@@ -19,6 +20,16 @@ type IOElement struct {
 
 
 func main() {
+
+	flag.Parse() // Scans the arg list and sets up flags
+
+	if flag.NArg() <= 0 {
+		fmt.Fprintf(os.Stderr, "no arguments")
+		return
+	}
+
+	point := flag.Arg(0)
+
 	//
 	var msg_in_et string
 	var msg_out_et string
@@ -42,9 +53,9 @@ func main() {
 		// стартуем тестирующие нити
 		c := make(chan *IOElement)
 
-		for thrd := 0; thrd < 100; thrd++ {
-		    go ggg(c)
-		 }
+		for thrd := 0; thrd < 4; thrd++ {
+			go ggg(c, point)
+		}
 
 		// выбираем данные для тестирующих нитей 
 
@@ -109,8 +120,8 @@ func main() {
 							io_el.in_msg = msg_in_et
 							io_el.out_msg = msg_out_et
 
-//							fmt.Println("msg_in_et ", msg_in_et)
-//							fmt.Println("msg_in_et ", msg_out_et)
+							//							fmt.Println("msg_in_et ", msg_in_et)
+							//							fmt.Println("msg_in_et ", msg_out_et)
 
 							c <- &io_el
 
@@ -135,13 +146,13 @@ func main() {
 
 }
 
-func ggg(c chan *IOElement) {
+func ggg(c chan *IOElement, point string) {
 
 	context, _ := zmq.NewContext()
 	socket, _ := context.NewSocket(zmq.REQ)
 	sock_uuid := uuid.New()
 	socket.SetSockOptString(zmq.IDENTITY, sock_uuid.String())
-	socket.Connect("tcp://172.17.1.231:5544")
+	socket.Connect(point)
 	println("sock_uuid: ", sock_uuid.String())
 
 	ticket := get_ticket(socket, "user", "9cXsvbvu8=")
@@ -159,7 +170,7 @@ func ggg(c chan *IOElement) {
 		}
 
 		msg_in_et := io_el.in_msg
-		msg_out_et := io_el.out_msg
+//		msg_out_et := io_el.out_msg
 
 		var f interface{}
 		err := json.Unmarshal([]byte(msg_in_et), &f)
@@ -175,8 +186,9 @@ func ggg(c chan *IOElement) {
 
 		if jsn_msg != nil {
 
-			msg_out_cmp, err := send_and_recieve(socket, jsn_msg)
-
+			//msg_out_cmp, err := 
+			send_and_recieve(socket, jsn_msg, sock_uuid.String())
+/*
 			//								msg_out_cmp, err := socket.Recv(0)
 			if msg_out_cmp == nil {
 				fmt.Println(err)
@@ -225,6 +237,7 @@ func ggg(c chan *IOElement) {
 
 				os.Exit(1)
 			}
+*/			
 		}
 
 	}
@@ -379,7 +392,7 @@ func get_ticket(socket zmq.Socket, login string, credential string) string {
 
 	//socket.Send([]byte(msg), 0)
 	//res, err := socket.Recv(0)
-	res, err := send_and_recieve(socket, []byte(msg))
+	res, err := send_and_recieve(socket, []byte(msg), "---")
 	if res == nil {
 		fmt.Println(err)
 	}
@@ -405,21 +418,41 @@ func get_ticket(socket zmq.Socket, login string, credential string) string {
 	return "0000"
 }
 
-func send_and_recieve(socket zmq.Socket, in_msg []byte) (res []byte, err os.Error) {
+func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, err os.Error) {
 	//		println("in_msg: ", string (in_msg))
-	socket.Send(in_msg, 0)
-	//		println("ok")
-	r0, err := socket.Recv(0)
+	//	println("send ", id)
+	var repeat bool
+	var r0 []byte
+	var err0 os.Error
+
+	repeat = true
+
+	for repeat {
+
+		socket.Send(in_msg, 0)
+		//		println("ok")
+		r0, err0 = socket.Recv(0)
+
+		if r0 != nil && len(r0) == 3 {
+			// это указание повторить запрос еще раз 
+			repeat = true
+		} else {
+			repeat = false		
+		}
+	}
+	//	println("recv ", id)
 	//			println("out_msg: ", string (r0))
-	return r0, err
+	return r0, err0
 }
 /*
-func send_and_recieve(socket zmq.Socket, in_msg []byte) (res []byte, err os.Error) {
+func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, err os.Error) {
 
+	println("send ", id))
 	socket.Send(in_msg, 0)
 
 
 	id_reply, err := socket.Recv(0)
+	println("recv ", id))
 //	println("id_reply: ", string (id_reply))
 
 	for q := 0; q < 1000; q++ {
