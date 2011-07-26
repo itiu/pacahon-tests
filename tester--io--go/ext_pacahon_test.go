@@ -10,7 +10,6 @@ import "json"
 import "log"
 import "time"
 import "flag" // command line option parser
-
 import uuid "github.com/dchest/uuid.go"
 
 type IOElement struct {
@@ -30,12 +29,19 @@ func main() {
 
 	point := flag.Arg(0)
 
+	var max_pull int = 30000
+	var messages_in [30000]string
+	var messages_out [30000]string
+	var cur_in_pull int = 0
 	//
 	var msg_in_et string
 	var msg_out_et string
 	var prev_ct int64
 	var count int
 	var prev_count int
+
+	//	 messages_in = new string[max_pull]
+	//	 messages_out = new string[max_pull]
 
 	fout, err := os.OpenFile("logfile", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -49,13 +55,28 @@ func main() {
 	ff, _ := ioutil.ReadDir("./")
 
 	if ff != nil {
-
 		// стартуем тестирующие нити
-		c := make(chan *IOElement)
+		c0 := make(chan *IOElement)
+		c1 := make(chan *IOElement)
+		c2 := make(chan *IOElement)
+		c3 := make(chan *IOElement)
+		c4 := make(chan *IOElement)
+		c5 := make(chan *IOElement)
+		c6 := make(chan *IOElement)
+		c7 := make(chan *IOElement)
+		c8 := make(chan *IOElement)
+		c9 := make(chan *IOElement)
 
-		for thrd := 0; thrd < 4; thrd++ {
-			go ggg(c, point)
-		}
+		go ggg(c0, point)
+		go ggg(c1, point)
+		go ggg(c2, point)
+		go ggg(c3, point)
+		go ggg(c4, point)
+		go ggg(c5, point)
+		go ggg(c6, point)
+		go ggg(c7, point)
+		go ggg(c8, point)
+		go ggg(c9, point)
 
 		// выбираем данные для тестирующих нитей 
 
@@ -111,19 +132,69 @@ func main() {
 							delta := ((float32(ct - prev_ct)) / 1e9)
 
 							if ct-prev_ct > 1e9 {
-								fmt.Println("count:", count, " cps:", (float32(count-prev_count))/delta)
+								fmt.Println("count readed:", count, " cps:", (float32(count-prev_count))/delta)
 								prev_ct = ct
 								prev_count = count
 							}
 
-							var io_el IOElement
-							io_el.in_msg = msg_in_et
-							io_el.out_msg = msg_out_et
+							messages_in[cur_in_pull] = msg_in_et
+							messages_out[cur_in_pull] = msg_out_et
+							cur_in_pull++
+							if cur_in_pull >= max_pull {
+								fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
+
+								var j byte
+								for i := 0; i < max_pull; i++ {
+									var io_el IOElement
+									io_el.in_msg = messages_in[i]
+									io_el.out_msg = messages_out[i]
+
+									if j == 0 {
+										c0 <- &io_el
+									}
+									if j == 1 {
+										c1 <- &io_el
+									}
+									if j == 2 {
+										c2 <- &io_el
+									}
+									if j == 3 {
+										c3 <- &io_el
+									}
+									if j == 4 {
+										c4 <- &io_el
+									}
+									if j == 5 {
+										c5 <- &io_el
+									}
+									if j == 6 {
+										c6 <- &io_el
+									}
+									if j == 7 {
+										c6 <- &io_el
+									}
+									if j == 8 {
+										c6 <- &io_el
+									}
+									if j == 9 {
+										c6 <- &io_el
+									}
+									j++
+
+									if j > 2 {
+										j = 0
+									}
+
+								}
+
+								cur_in_pull = 0
+							}
 
 							//							fmt.Println("msg_in_et ", msg_in_et)
 							//							fmt.Println("msg_in_et ", msg_out_et)
+							//							c <- &io_el
 
-							c <- &io_el
+							//							fmt.Println("count ", count)
 
 							count++
 
@@ -142,8 +213,7 @@ func main() {
 
 	}
 
-	time.Sleep(1000 * 60 * 1e9)
-
+//	time.Sleep(1000 * 60 * 1e9)
 }
 
 func ggg(c chan *IOElement, point string) {
@@ -158,7 +228,7 @@ func ggg(c chan *IOElement, point string) {
 	ticket := get_ticket(socket, "user", "9cXsvbvu8=")
 
 	fmt.Println("ggg is waiting...")
-	time.Sleep(50 * 1e9)
+	time.Sleep(10 * 1e9)
 
 	fmt.Println("ggg read chanel")
 
@@ -170,7 +240,7 @@ func ggg(c chan *IOElement, point string) {
 		}
 
 		msg_in_et := io_el.in_msg
-//		msg_out_et := io_el.out_msg
+		//		msg_out_et := io_el.out_msg
 
 		var f interface{}
 		err := json.Unmarshal([]byte(msg_in_et), &f)
@@ -188,56 +258,56 @@ func ggg(c chan *IOElement, point string) {
 
 			//msg_out_cmp, err := 
 			send_and_recieve(socket, jsn_msg, sock_uuid.String())
-/*
-			//								msg_out_cmp, err := socket.Recv(0)
-			if msg_out_cmp == nil {
-				fmt.Println(err)
-			}
-
-			var jsn_out_cmp []interface{}
-			err = json.Unmarshal([]byte(msg_out_cmp), &jsn_out_cmp)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			var jsn_out_et []interface{}
-			err = json.Unmarshal([]byte(msg_out_et), &jsn_out_et)
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			res, _ := cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0)
-
-			if res == false {
-				fmt.Println("msg out_et != out ")
-
-				fout_et, err := os.OpenFile("ou_et", os.O_WRONLY|os.O_CREATE, 0666)
-				if err != nil {
-					fmt.Fprintf(os.Stderr, " %s\n", err)
-					return
+			/*
+				//								msg_out_cmp, err := socket.Recv(0)
+				if msg_out_cmp == nil {
+					fmt.Println(err)
 				}
-				fout_et.WriteString(msg_out_et)
-				fout_et.Close()
 
-				fout_cmp, err := os.OpenFile("ou_cmp", os.O_WRONLY|os.O_CREATE, 0666)
+				var jsn_out_cmp []interface{}
+				err = json.Unmarshal([]byte(msg_out_cmp), &jsn_out_cmp)
 				if err != nil {
-					fmt.Fprintf(os.Stderr, " %s\n", err)
-					return
+					fmt.Println(err)
 				}
-				fout_cmp.Write(msg_out_cmp)
-				fout_cmp.Close()
 
-				fout_in, err := os.OpenFile("in_et", os.O_WRONLY|os.O_CREATE, 0666)
+				var jsn_out_et []interface{}
+				err = json.Unmarshal([]byte(msg_out_et), &jsn_out_et)
 				if err != nil {
-					fmt.Fprintf(os.Stderr, " %s\n", err)
-					return
+					fmt.Println(err)
 				}
-				fout_in.WriteString(msg_in_et)
-				fout_in.Close()
 
-				os.Exit(1)
-			}
-*/			
+				res, _ := cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0)
+
+				if res == false {
+					fmt.Println("msg out_et != out ")
+
+					fout_et, err := os.OpenFile("ou_et", os.O_WRONLY|os.O_CREATE, 0666)
+					if err != nil {
+						fmt.Fprintf(os.Stderr, " %s\n", err)
+						return
+					}
+					fout_et.WriteString(msg_out_et)
+					fout_et.Close()
+
+					fout_cmp, err := os.OpenFile("ou_cmp", os.O_WRONLY|os.O_CREATE, 0666)
+					if err != nil {
+						fmt.Fprintf(os.Stderr, " %s\n", err)
+						return
+					}
+					fout_cmp.Write(msg_out_cmp)
+					fout_cmp.Close()
+
+					fout_in, err := os.OpenFile("in_et", os.O_WRONLY|os.O_CREATE, 0666)
+					if err != nil {
+						fmt.Fprintf(os.Stderr, " %s\n", err)
+						return
+					}
+					fout_in.WriteString(msg_in_et)
+					fout_in.Close()
+
+					os.Exit(1)
+				}
+			*/
 		}
 
 	}
@@ -436,8 +506,9 @@ func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, 
 		if r0 != nil && len(r0) == 3 {
 			// это указание повторить запрос еще раз 
 			repeat = true
+			time.Sleep(1e6)
 		} else {
-			repeat = false		
+			repeat = false
 		}
 	}
 	//	println("recv ", id)
