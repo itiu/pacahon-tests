@@ -22,12 +22,14 @@ func main() {
 
 	flag.Parse() // Scans the arg list and sets up flags
 
-	if flag.NArg() <= 0 {
-		fmt.Fprintf(os.Stderr, "no arguments")
+	if flag.NArg() <= 2 {
+		fmt.Fprintf(os.Stderr, "exec: ext_pacahon_test [string:(pacahon point)] [Y/N:(compare result)] [Y/N:(multi thread)]")
 		return
 	}
 
 	point := flag.Arg(0)
+	compare_result := flag.Arg(1)
+	multi_thread := flag.Arg(2)
 
 	var max_pull int = 30000
 	var messages_in [30000]string
@@ -39,9 +41,6 @@ func main() {
 	var prev_ct int64
 	var count int
 	var prev_count int
-
-	//	 messages_in = new string[max_pull]
-	//	 messages_out = new string[max_pull]
 
 	fout, err := os.OpenFile("logfile", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -55,7 +54,9 @@ func main() {
 	ff, _ := ioutil.ReadDir("./")
 
 	if ff != nil {
+
 		// стартуем тестирующие нити
+
 		c0 := make(chan *IOElement)
 		c1 := make(chan *IOElement)
 		c2 := make(chan *IOElement)
@@ -67,16 +68,19 @@ func main() {
 		c8 := make(chan *IOElement)
 		c9 := make(chan *IOElement)
 
-		go ggg(c0, point)
-		go ggg(c1, point)
-		go ggg(c2, point)
-		go ggg(c3, point)
-		go ggg(c4, point)
-		go ggg(c5, point)
-		go ggg(c6, point)
-		go ggg(c7, point)
-		go ggg(c8, point)
-		go ggg(c9, point)
+		go ggg(c0, point, compare_result)
+
+		if multi_thread == "Y" {
+			go ggg(c1, point, compare_result)
+			go ggg(c2, point, compare_result)
+			go ggg(c3, point, compare_result)
+			go ggg(c4, point, compare_result)
+			go ggg(c5, point, compare_result)
+			go ggg(c6, point, compare_result)
+			go ggg(c7, point, compare_result)
+			go ggg(c8, point, compare_result)
+			go ggg(c9, point, compare_result)
+		}
 
 		// выбираем данные для тестирующих нитей 
 
@@ -149,40 +153,45 @@ func main() {
 									io_el.in_msg = messages_in[i]
 									io_el.out_msg = messages_out[i]
 
-									if j == 0 {
-										c0 <- &io_el
-									}
-									if j == 1 {
-										c1 <- &io_el
-									}
-									if j == 2 {
-										c2 <- &io_el
-									}
-									if j == 3 {
-										c3 <- &io_el
-									}
-									if j == 4 {
-										c4 <- &io_el
-									}
-									if j == 5 {
-										c5 <- &io_el
-									}
-									if j == 6 {
-										c6 <- &io_el
-									}
-									if j == 7 {
-										c6 <- &io_el
-									}
-									if j == 8 {
-										c6 <- &io_el
-									}
-									if j == 9 {
-										c6 <- &io_el
-									}
-									j++
+									if multi_thread == "Y" {
+										if j == 0 {
+											c0 <- &io_el
+										}
 
-									if j > 2 {
-										j = 0
+										if j == 1 {
+											c1 <- &io_el
+										}
+										if j == 2 {
+											c2 <- &io_el
+										}
+										if j == 3 {
+											c3 <- &io_el
+										}
+										if j == 4 {
+											c4 <- &io_el
+										}
+										if j == 5 {
+											c5 <- &io_el
+										}
+										if j == 6 {
+											c6 <- &io_el
+										}
+										if j == 7 {
+											c6 <- &io_el
+										}
+										if j == 8 {
+											c6 <- &io_el
+										}
+										if j == 9 {
+											c6 <- &io_el
+										}
+										j++
+
+										if j > 9 {
+											j = 0
+										}
+									} else {
+										c0 <- &io_el
 									}
 
 								}
@@ -213,10 +222,10 @@ func main() {
 
 	}
 
-//	time.Sleep(1000 * 60 * 1e9)
+	//	time.Sleep(1000 * 60 * 1e9)
 }
 
-func ggg(c chan *IOElement, point string) {
+func ggg(c chan *IOElement, point string, compare_result string) {
 
 	context, _ := zmq.NewContext()
 	socket, _ := context.NewSocket(zmq.REQ)
@@ -240,7 +249,7 @@ func ggg(c chan *IOElement, point string) {
 		}
 
 		msg_in_et := io_el.in_msg
-		//		msg_out_et := io_el.out_msg
+		msg_out_et := io_el.out_msg
 
 		var f interface{}
 		err := json.Unmarshal([]byte(msg_in_et), &f)
@@ -256,10 +265,10 @@ func ggg(c chan *IOElement, point string) {
 
 		if jsn_msg != nil {
 
-			//msg_out_cmp, err := 
-			send_and_recieve(socket, jsn_msg, sock_uuid.String())
-			/*
-				//								msg_out_cmp, err := socket.Recv(0)
+			if compare_result == "Y" {
+
+				msg_out_cmp, err := send_and_recieve(socket, jsn_msg, sock_uuid.String())
+
 				if msg_out_cmp == nil {
 					fmt.Println(err)
 				}
@@ -307,7 +316,8 @@ func ggg(c chan *IOElement, point string) {
 
 					os.Exit(1)
 				}
-			*/
+
+			}
 		}
 
 	}
