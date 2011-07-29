@@ -1,15 +1,12 @@
 [
 {
-"@" : "msg:M_8CDFA489D7C55FC",
-"a" : "msg:Message",
-"msg:in-reply-to" : "msg:M123456_22",
-"msg:sender" : "pacahon",
-"msg:reciever" : "external_tester",
-"msg:status" : "ok",
-"msg:result" : 
-	{
-	 	 "auth:ticket" : "auth:7c15dae8-4d25-439a-bc09-444c10224106"
-	},
-"msg:reason" : "login и password совпадают"
+"@" : "msg:M_8CE1B55E3A63793",
+"a": "msg:Message",
+"msg:in-reply-to": "msg:M123456_22",
+"msg:sender": "pacahon",
+"msg:reciever": "external_tester",
+"msg:status": "fail",
+"msg:result": null,
+"msg:reason": "нет причин для выдачи сессионного билета"
 }
-]
+] 

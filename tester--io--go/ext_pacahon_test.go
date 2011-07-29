@@ -274,7 +274,12 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 				}
 
 				var jsn_out_cmp []interface{}
-				err = json.Unmarshal([]byte(msg_out_cmp), &jsn_out_cmp)
+				bb := make([]byte, len(msg_out_cmp)+2)
+				bb[0] = '['
+				copy(bb[1:len(msg_out_cmp)+1], msg_out_cmp)
+				bb[len(msg_out_cmp)+1] = ']'
+
+				err = json.Unmarshal(bb, &jsn_out_cmp)
 				if err != nil {
 					fmt.Println(err)
 				}

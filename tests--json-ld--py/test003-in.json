@@ -15,6 +15,6 @@
     "msg:args" :
     {
 		"auth:login" : "admin^^xsd:string",
-		"auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8=^^xsd:string"
+		"auth:credential" : "1QL0AFWMIX8NRZTKeof9cXsvbvu8=^^xsd:string"
     }
 }
