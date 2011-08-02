@@ -17,7 +17,6 @@ type IOElement struct {
 	out_msg string
 }
 
-
 func main() {
 
 	flag.Parse() // Scans the arg list and sets up flags
@@ -31,9 +30,9 @@ func main() {
 	compare_result := flag.Arg(1)
 	multi_thread := flag.Arg(2)
 
-	var max_pull int = 30000
-	var messages_in [30000]string
-	var messages_out [30000]string
+	var max_pull int = 10000
+	var messages_in [10000]string
+	var messages_out [10000]string
 	var cur_in_pull int = 0
 	//
 	var msg_in_et string
@@ -41,6 +40,9 @@ func main() {
 	var prev_ct int64
 	var count int
 	var prev_count int
+
+	var cc [50]chan *IOElement
+	var cc_len int = 20
 
 	fout, err := os.OpenFile("logfile", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -55,31 +57,14 @@ func main() {
 
 	if ff != nil {
 
+		if multi_thread != "Y" {
+			cc_len = 1
+		}
+
 		// стартуем тестирующие нити
-
-		c0 := make(chan *IOElement)
-		c1 := make(chan *IOElement)
-		c2 := make(chan *IOElement)
-		c3 := make(chan *IOElement)
-		c4 := make(chan *IOElement)
-		c5 := make(chan *IOElement)
-		c6 := make(chan *IOElement)
-		c7 := make(chan *IOElement)
-		c8 := make(chan *IOElement)
-		c9 := make(chan *IOElement)
-
-		go ggg(c0, point, compare_result)
-
-		if multi_thread == "Y" {
-			go ggg(c1, point, compare_result)
-			go ggg(c2, point, compare_result)
-			go ggg(c3, point, compare_result)
-			go ggg(c4, point, compare_result)
-			go ggg(c5, point, compare_result)
-			go ggg(c6, point, compare_result)
-			go ggg(c7, point, compare_result)
-			go ggg(c8, point, compare_result)
-			go ggg(c9, point, compare_result)
+		for i := 0; i < cc_len; i++ {
+			cc[i] = make(chan *IOElement)
+			go ggg(cc[i], point, compare_result)
 		}
 
 		// выбираем данные для тестирующих нитей 
@@ -147,53 +132,18 @@ func main() {
 							if cur_in_pull >= max_pull {
 								fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
 
-								var j byte
+								var j int
 								for i := 0; i < max_pull; i++ {
 									var io_el IOElement
 									io_el.in_msg = messages_in[i]
 									io_el.out_msg = messages_out[i]
 
-									if multi_thread == "Y" {
-										if j == 0 {
-											c0 <- &io_el
-										}
+									cc[j] <- &io_el
 
-										if j == 1 {
-											c1 <- &io_el
-										}
-										if j == 2 {
-											c2 <- &io_el
-										}
-										if j == 3 {
-											c3 <- &io_el
-										}
-										if j == 4 {
-											c4 <- &io_el
-										}
-										if j == 5 {
-											c5 <- &io_el
-										}
-										if j == 6 {
-											c6 <- &io_el
-										}
-										if j == 7 {
-											c6 <- &io_el
-										}
-										if j == 8 {
-											c6 <- &io_el
-										}
-										if j == 9 {
-											c6 <- &io_el
-										}
-										j++
-
-										if j > 9 {
-											j = 0
-										}
-									} else {
-										c0 <- &io_el
+									j++
+									if j >= cc_len {
+										j = 0
 									}
-
 								}
 
 								cur_in_pull = 0
@@ -265,10 +215,9 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 		if jsn_msg != nil {
 
+			msg_out_cmp, err := send_and_recieve(socket, jsn_msg, sock_uuid.String())
+
 			if compare_result == "Y" {
-
-				msg_out_cmp, err := send_and_recieve(socket, jsn_msg, sock_uuid.String())
-
 				if msg_out_cmp == nil {
 					fmt.Println(err)
 				}
