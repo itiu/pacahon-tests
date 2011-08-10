@@ -423,7 +423,9 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 					fmt.Println(level, "	cc=", v)
 				}
 				for _, vr := range dd {
-					fmt.Println(level, "		oo=", vr)
+					if trace {
+						fmt.Println(level, "		oo=", vr)
+					}
 					res, is_local_level_down = cmp_msg_out("", v, "", vr, level+1, trace)
 					is_level_down = 1
 					if res == true {
