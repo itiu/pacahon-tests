@@ -30,6 +30,12 @@ func main() {
 	compare_result := flag.Arg(1)
 	multi_thread := flag.Arg(2)
 
+	var io_file string
+
+	if flag.NArg() == 4 {
+		io_file = flag.Arg(3)
+	}
+
 	var max_pull int = 10000
 	var messages_in [10000]string
 	var messages_out [10000]string
@@ -70,7 +76,7 @@ func main() {
 		// выбираем данные для тестирующих нитей 
 
 		for i := 0; i < len(ff); i++ {
-			if strings.Contains(ff[i].Name, ".io") {
+			if io_file == "" && strings.Contains(ff[i].Name, ".io") || io_file != "" && strings.Contains(ff[i].Name, io_file) {
 
 				log.Println("found io: ", ff[i].Name)
 
@@ -81,11 +87,14 @@ func main() {
 				}
 
 				defer f.Close()
+
 				r, err := bufio.NewReaderSize(f, 4*1024)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
+
+				log.Println("read io: ", ff[i].Name)
 
 				var io_type bool = true
 
@@ -110,12 +119,13 @@ func main() {
 
 						if io_type == true {
 							msg_in_et = line[pos:len(line)]
+							//							log.Println("read msg-in ", msg_in_et)
 						} else {
 							msg_out_et = line[pos:len(line)]
+							//							log.Println("read msg-out ", msg_out_et)
 						}
 
 						if io_type == false {
-
 							ct := time.Nanoseconds()
 
 							delta := ((float32(ct - prev_ct)) / 1e9)
@@ -125,6 +135,8 @@ func main() {
 								prev_ct = ct
 								prev_count = count
 							}
+
+							//							log.Println("msg to pull")
 
 							messages_in[cur_in_pull] = msg_in_et
 							messages_out[cur_in_pull] = msg_out_et
@@ -163,6 +175,22 @@ func main() {
 					line, err = r.ReadString('\r')
 				}
 
+				fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
+
+				var j int
+				for i := 0; i < max_pull; i++ {
+					var io_el IOElement
+					io_el.in_msg = messages_in[i]
+					io_el.out_msg = messages_out[i]
+
+					cc[j] <- &io_el
+
+					j++
+					if j >= cc_len {
+						j = 0
+					}
+				}
+
 				if err != os.EOF {
 					fmt.Println(err)
 					return
@@ -187,7 +215,7 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 	ticket := get_ticket(socket, "user", "9cXsvbvu8=")
 
 	fmt.Println("ggg is waiting...")
-	time.Sleep(10 * 1e9)
+	time.Sleep(5 * 1e9)
 
 	fmt.Println("ggg read chanel")
 
@@ -223,12 +251,20 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 				}
 
 				var jsn_out_cmp []interface{}
-				bb := make([]byte, len(msg_out_cmp)+2)
-				bb[0] = '['
-				copy(bb[1:len(msg_out_cmp)+1], msg_out_cmp)
-				bb[len(msg_out_cmp)+1] = ']'
+				var bb []byte
+
+				if msg_out_cmp[0] != '[' {
+
+					bb = make([]byte, len(msg_out_cmp)+2)
+					bb[0] = '['
+					copy(bb[1:len(msg_out_cmp)+1], msg_out_cmp)
+					bb[len(msg_out_cmp)+1] = ']'
+				} else {
+					bb = msg_out_cmp
+				}
 
 				err = json.Unmarshal(bb, &jsn_out_cmp)
+
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -239,10 +275,12 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 					fmt.Println(err)
 				}
 
-				res, _ := cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0)
+				res, _ := cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0, false)
 
 				if res == false {
 					fmt.Println("msg out_et != out ")
+
+					cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0, true)
 
 					fout_et, err := os.OpenFile("ou_et", os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
@@ -265,7 +303,12 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 						fmt.Fprintf(os.Stderr, " %s\n", err)
 						return
 					}
+					fout_in.WriteString("[]\n")
+					fout_in.WriteString("INPUT\n")
 					fout_in.WriteString(msg_in_et)
+					fout_in.WriteString("[]\n")
+					fout_in.WriteString("OUTPUT\n")
+					fout_in.WriteString(msg_out_et)
 					fout_in.Close()
 
 					os.Exit(1)
@@ -278,27 +321,47 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 }
 
-func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_cmp interface{}, level int) (bool, int) {
+func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_cmp interface{}, level int, trace bool) (bool, int) {
+
+	if trace {
+		fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
+	}
 
 	var is_level_down int = 0
 
 	if msg_out_et == nil && msg_out_cmp != nil {
+
+		if trace {
+			fmt.Println(level, " return")
+		}
 		return false, is_level_down
 	}
 
 	if msg_out_et != nil && msg_out_cmp == nil {
+		if trace {
+			fmt.Println(level, " return")
+		}
 		return false, is_level_down
 	}
 
 	if msg_out_et == nil && msg_out_cmp == nil {
+		if trace {
+			fmt.Println(level, "return")
+		}
 		return true, is_level_down
 	}
 
 	if key_et == "@" && level == 2 {
+		if trace {
+			fmt.Println(level, "return")
+		}
 		return true, is_level_down
 	}
 
 	if key_et == "msg:reason" || key_et == "auth:ticket" {
+		if trace {
+			fmt.Println(level, "return")
+		}
 		return true, is_level_down
 	}
 
@@ -309,18 +372,24 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 
 		case string:
 			if dd != vv {
-				//				fmt.Println(key_et, ":", vv, " != ", dd, level)
+				if trace {
+					fmt.Println(level, " ", key_et, ":", vv, " != ", dd)
+				}
 				return false, is_level_down
 			}
 		default:
-			//			fmt.Println(key_et, " => different type")
+			if trace {
+				fmt.Println(level, " ", key_et, " => different type")
+			}
 			return false, is_level_down
 		}
 
 	case int:
 		dd := msg_out_cmp.(int)
 		if dd != vv {
-			//			fmt.Println(key_et, ":", vv, " != ", dd, level)
+			if trace {
+				fmt.Println(level, " ", key_et, ":", vv, " != ", dd)
+			}
 			return false, is_level_down
 		}
 
@@ -336,19 +405,26 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 			//						}
 
 			if len(vv) == 0 && len(dd) == 0 {
+				if trace {
+					fmt.Println(level, " return")
+				}
 				return true, is_level_down
 			}
 
 			var is_local_level_down int = 0
 			var res bool
 
-			//			fmt.Println(level, " ***{", len(vv), " ", len(dd))
+			if trace {
+				fmt.Println(level, " ***{", len(vv), " ", len(dd))
+			}
 			for _, v := range vv {
 				var is_found = false
-				//				fmt.Println(level, "	cc=", v)
+				if trace {
+					fmt.Println(level, "	cc=", v)
+				}
 				for _, vr := range dd {
-					//					fmt.Println(level, "		oo=", vr)
-					res, is_local_level_down = cmp_msg_out("", v, "", vr, level+1)
+					fmt.Println(level, "		oo=", vr)
+					res, is_local_level_down = cmp_msg_out("", v, "", vr, level+1, trace)
 					is_level_down = 1
 					if res == true {
 						is_found = true
@@ -365,7 +441,9 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 					return false, is_local_level_down
 				}
 			}
-			//			fmt.Println(level, " }***")
+			if trace {
+				fmt.Println(level, " }***")
+			}
 
 			//			if count_found > 1 {
 			//				fmt.Println(count_found, ":", count_compared)
@@ -388,7 +466,9 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 			return true, is_level_down
 
 		default:
-			//			fmt.Println(key_et, " => different type")
+			if trace {
+				fmt.Println(key_et, " => different type")
+			}
 			return false, is_level_down
 
 		}
@@ -399,13 +479,19 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 			case map[string]interface{}:
 
 				//			dd := msg_out_cmp.(map[string]interface{})
-				res, _ := cmp_msg_out(k, v, k, dd[k], level+1)
+				res, _ := cmp_msg_out(k, v, k, dd[k], level+1, trace)
 				is_level_down = 1
 				if res == false {
+					if trace {
+						fmt.Println(level, " return")
+					}
 					return false, is_level_down
 				}
 			default:
-				//				fmt.Println(key_et, " => different type")
+				fmt.Println(key_et, " => different type")
+				if trace {
+					fmt.Println(level, " return")
+				}
 				return false, is_level_down
 			}
 		}
