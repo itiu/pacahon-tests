@@ -97,7 +97,7 @@ func main() {
 				log.Println("read io: ", ff[i].Name)
 
 				var io_type bool = true
-				cur_in_pull = 0;
+				cur_in_pull = 0
 
 				line, err := r.ReadString('\r')
 				for err == nil {
@@ -191,7 +191,7 @@ func main() {
 						j = 0
 					}
 				}
-				
+
 				fmt.Println("file complete, count messages = ", cur_in_pull)
 
 				if err != os.EOF {
@@ -253,29 +253,43 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 					fmt.Println(err)
 				}
 
-				var jsn_out_cmp []interface{}
+				var msg_out_et_array []byte
 				var bb []byte
 
 				if msg_out_cmp[0] != '[' {
-
 					bb = make([]byte, len(msg_out_cmp)+2)
 					bb[0] = '['
 					copy(bb[1:len(msg_out_cmp)+1], msg_out_cmp)
 					bb[len(msg_out_cmp)+1] = ']'
-				} else {
-					bb = msg_out_cmp
+					msg_out_cmp = bb
 				}
 
-				err = json.Unmarshal(bb, &jsn_out_cmp)
+				if msg_out_et[0] != '[' {
+					bb = make([]byte, len(msg_out_et)+2)
+					bb[0] = '['
+					copy(bb[1:len(msg_out_et)+1], msg_out_et)
+					bb[len(msg_out_et)+1] = ']'
+					msg_out_et_array = bb
+				} else {
+					msg_out_et_array = []byte(msg_out_et)
+				}
+
+				var jsn_out_cmp []interface{}
+
+				err = json.Unmarshal(msg_out_cmp, &jsn_out_cmp)
 
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println("err! unmarshal out_cmp:", err)
+					fmt.Println(string(bb))
+					return
 				}
 
 				var jsn_out_et []interface{}
-				err = json.Unmarshal([]byte(msg_out_et), &jsn_out_et)
+				err = json.Unmarshal(msg_out_et_array, &jsn_out_et)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println("err! unmarshal out_et:", err)
+					fmt.Println(msg_out_et)
+					return
 				}
 
 				res, _ := cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0, false)
@@ -283,7 +297,7 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 				if res == false {
 					fmt.Println("msg out_et != out ")
 
-//					cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0, true)
+					//					cmp_msg_out("", jsn_out_et, "", jsn_out_cmp, 0, true)
 
 					fout_et, err := os.OpenFile("ou_et", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 					if err != nil {
@@ -326,16 +340,16 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_cmp interface{}, level int, trace bool) (bool, int) {
 
-//	if trace {
-//		fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
-//	}
+	//	if trace {
+	//		fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
+	//	}
 
 	var is_level_down int = 0
 
 	if msg_out_et == nil && msg_out_cmp != nil {
 
 		if trace {
-		fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
+			fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
 			fmt.Println(level, " return")
 		}
 		return false, is_level_down
@@ -343,30 +357,30 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 
 	if msg_out_et != nil && msg_out_cmp == nil {
 		if trace {
-		fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
+			fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
 			fmt.Println(level, " return")
 		}
 		return false, is_level_down
 	}
 
 	if msg_out_et == nil && msg_out_cmp == nil {
-//		if trace {
-//			fmt.Println(level, "return")
-//		}
+		//		if trace {
+		//			fmt.Println(level, "return")
+		//		}
 		return true, is_level_down
 	}
 
 	if key_et == "@" && level == 2 {
-//		if trace {
-//			fmt.Println(level, "return")
-//		}
+		//		if trace {
+		//			fmt.Println(level, "return")
+		//		}
 		return true, is_level_down
 	}
 
 	if key_et == "msg:reason" || key_et == "auth:ticket" {
-//		if trace {
-//			fmt.Println(level, "return")
-//		}
+		//		if trace {
+		//			fmt.Println(level, "return")
+		//		}
 		return true, is_level_down
 	}
 
@@ -410,27 +424,27 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 			//						}
 
 			if len(vv) == 0 && len(dd) == 0 {
-//				if trace {
-//					fmt.Println(level, " return")
-//				}
+				//				if trace {
+				//					fmt.Println(level, " return")
+				//				}
 				return true, is_level_down
 			}
 
 			var is_local_level_down int = 0
 			var res bool
 
-//			if trace {
-//				fmt.Println(level, " ***{", len(vv), " ", len(dd))
-//			}
+			//			if trace {
+			//				fmt.Println(level, " ***{", len(vv), " ", len(dd))
+			//			}
 			for _, v := range vv {
 				var is_found = false
-//				if trace {
-//					fmt.Println(level, "	cc=", v)
-//				}
+				//				if trace {
+				//					fmt.Println(level, "	cc=", v)
+				//				}
 				for _, vr := range dd {
-//					if trace {
-//						fmt.Println(level, "		oo=", vr)
-//					}
+					//					if trace {
+					//						fmt.Println(level, "		oo=", vr)
+					//					}
 					res, is_local_level_down = cmp_msg_out("", v, "", vr, level+1, trace)
 					is_level_down = 1
 					if res == true {
@@ -448,9 +462,9 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 					return false, is_local_level_down
 				}
 			}
-//			if trace {
-//				fmt.Println(level, " }***")
-//			}
+			//			if trace {
+			//				fmt.Println(level, " }***")
+			//			}
 
 			//			if count_found > 1 {
 			//				fmt.Println(count_found, ":", count_compared)
