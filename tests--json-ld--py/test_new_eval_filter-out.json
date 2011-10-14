@@ -1,0 +1,21 @@
+{
+	"#" :
+	{
+		"msg" : "http://gost19.org/message#",
+		"rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"rdfs" : "http://www.w3.org/2000/01/rdf-schema#",
+		"xsd" : "http://www.w3.org/2001/XMLSchema#",
+		"auth" : "http://www.gost19.org/auth#"
+	},
+	"@" : "msg:M0000000000000",
+	"a" : "msg:Message",
+	"msg:sender" : "pacahon^^xsd:string",
+	"msg:reciever" : "external_tester^^xsd:string",
+	"msg:in-reply-to" : "msg:M123456_22",
+	"msg:reason" : "login и password совпадают^^xsd:string",
+	"msg:result" : 
+    {
+		"auth:ticket" : "auth:$$$$$$$$-$$$$-$$$$-$$$$-$$$$$$$$$$$$"
+    },
+    "msg:status" : "ok^^xsd:string"
+}

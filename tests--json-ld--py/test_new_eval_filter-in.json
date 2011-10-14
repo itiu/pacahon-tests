@@ -1,0 +1,39 @@
+[
+        {
+                "@" : "msg:M123456_22",
+                "a" : "msg:Message",
+                "msg:sender" : "external_tester",
+                "msg:reciever" : "pacahon",
+                "msg:command" : "get_ticket",
+                "msg:args" :
+                {
+                        "auth:login" : "admin",
+                "auth:credential" : "QL0AFWMIX8NRZTKeof9cXsvbvu8="
+                }
+        },
+
+{
+    "@" : "msg:Message_1",
+    "a" : "msg:Message",
+    "msg:sender" : "external_tester",
+    "msg:ticket" : "@local",
+    "msg:reciever" : "pacahon",
+    "msg:command" : "put",
+    "msg:args" :
+    {
+	"@" : "event:event_filter6",
+	"a" : "event:Event",
+	"event:to":"semargl",
+	"event:when":"after",
+	"event:autoremove":"yes",
+	"event:subject_type":"doc:Note",
+	"event:condition": "gost19:active == 'false' || ( docs19:position == 'Специалист' &&  b:c == '246' )",
+	"event:msg_template" : 
+	[
+	 "<`@1`><mo#sj><mo#ds>.<`@1`><mo/ts#arg>\"`docs:parentUnit/_(?P<var>[A-Za-z0-9-]+)/`\".<`@2`><mo#sj><mo/ts#sf>.<`@2`><mo/ts#arg>\"request-queue-0000000-0000-0000-0000-000000000001\".<`@2`><mo/ts/msg#r_t>\"request-queue-0000000-0000-0000-0000-000000000001\". ",
+	 "<`@2`><mo#sj><mo#ds>.<`@2`><mo/ts#arg>\"`docs:parentUnit/_(?P<var>[A-Za-z0-9-]+)/`\".<`@3`><mo#sj><mo/ts#sf>.<`@3`><mo/ts#arg>\"request-queue-0000000-0000-0000-0000-000000000002\".<`@3`><mo/ts/msg#r_t>\"request-queue-0000000-0000-0000-0000-000000000002\". "
+	]
+    }
+}
+]
+

@@ -30,17 +30,18 @@
 		    },
 		    {
 			"@" : "test:person_575c91f5-6c67-4137-bdf1-fe573bad8993",
-			"a" : "swrc:Employee",
+			"a" : "doc:Note",
 			"gost19:active" : "true"
 		    },
 		    {
 			"@" : "test:doc_575c91f5-6c67-4137-bdf1-fe573bad8993",
-			"a" : "test:employee_card",
+			"a" : "doc:Note",
 			"gost19:active" : "true",
 			"gost19:employee" : "zdb:person_575c91f5-6c67-4137-bdf1-fe573bad8993",
 			"gost19:middleName" : "Константинович",
 			"docs19:department" : "zdb:dep_90900000",
 			"docs19:position" : "Специалист",
+			"docs:parentUnit" : "zdb:person_575c91f5-6c67-4137-bdf1-fe573bad8993",
 			"swrc:email" : "roman.karpov@mgroup.com",
 			"swrc:firstName" : "Роман",
 			"swrc:lastName" : "Карпов",
