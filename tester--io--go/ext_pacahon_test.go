@@ -234,6 +234,11 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 		var f interface{}
 		err := json.Unmarshal([]byte(msg_in_et), &f)
+		if err != nil {
+			fmt.Println("err! unmarshal msg_in_et:", err)
+			fmt.Println(string(msg_in_et))
+			return
+		}
 
 		m := f.(map[string]interface{})
 
@@ -274,21 +279,19 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 					msg_out_et_array = []byte(msg_out_et)
 				}
 
-				var jsn_out_cmp []interface{}
-
-				err = json.Unmarshal(msg_out_cmp, &jsn_out_cmp)
-
-				if err != nil {
-					fmt.Println("err! unmarshal out_cmp:", err)
-					fmt.Println(string(bb))
-					return
-				}
-
 				var jsn_out_et []interface{}
 				err = json.Unmarshal(msg_out_et_array, &jsn_out_et)
 				if err != nil {
 					fmt.Println("err! unmarshal out_et:", err)
 					fmt.Println(msg_out_et)
+					return
+				}
+
+				var jsn_out_cmp []interface{}
+				err = json.Unmarshal(msg_out_cmp, &jsn_out_cmp)
+				if err != nil {
+					fmt.Println("err! unmarshal out_cmp:", err)
+					fmt.Println(string(bb))
 					return
 				}
 
@@ -458,6 +461,11 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 					if is_local_level_down == 1 && level > 0 {
 						fmt.Println(level, " ", key_et, " : et != cmp, ", v)
 						fmt.Println(level, " ", key_et, " => len (res):", len(dd), " != len (et):", len(vv))
+						
+						if len(dd) == 6000 {
+							fmt.Println("!!! len(dd) = ", len(dd))
+							return true, is_local_level_down
+						}
 					}
 					return false, is_local_level_down
 				}
