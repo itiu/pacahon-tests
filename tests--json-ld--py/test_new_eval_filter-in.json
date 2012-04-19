@@ -21,6 +21,30 @@
     "msg:command" : "put",
     "msg:args" :
     {
+	"@" : "event:event_filter7",
+	"a" : "event:Event",
+	"event:to":"semargl",
+	"event:when":"after",
+	"event:autoremove":"no",
+	"event:subject_type":"docs:unit_card",
+	"event:condition": "docs:active == 'true'",
+	"event:msg_template" : 
+	[
+	 "<`$1`><mo#sj><mo#ds>.<`$1`><mo/ts#arg>\"`@/_(?P<var>[A-Za-z0-9-]+)/`\".<`$2`><mo#sj><mo/ts#sf>.<`$2`><mo/ts#arg>\"request-queue-0000000-0000-0000-0000-000000000001\".<`$1`><mo/ts/msg#r_t>\"request-queue-0000000-0000-0000-0000-000000000001\". ",
+	 "<`$1`><mo#sj><mo#p>.<`$1`><mo/ts#arg>{<`@/_(?P<var>[A-Za-z0-9-]+)/`><mo#mmbOf>\"`docs:parentUnit/_(?P<var>[A-Za-z0-9-]+)/`\".}.<`$2`><mo#sj><mo/ts#sf>.<`$2`><mo/ts#arg>\"request-queue-0000000-0000-0000-0000-000000000004\".<`$1`><mo/ts/msg#r_t>\"request-queue-0000000-0000-0000-0000-000000000004\". "
+	]
+    }
+}
+,
+{
+    "@" : "msg:Message_2",
+    "a" : "msg:Message",
+    "msg:sender" : "external_tester",
+    "msg:ticket" : "@local",
+    "msg:reciever" : "pacahon",
+    "msg:command" : "put",
+    "msg:args" :
+    {
 	"@" : "event:event_filter6",
 	"a" : "event:Event",
 	"event:to":"semargl",
@@ -34,30 +58,8 @@
 	 "<`$1`><mo#sj><mo#p>.<`$1`><mo/ts#arg>{<`@/_(?P<var>[A-Za-z0-9-]+)/`><mo#mmbOf>\"`docs:parentUnit/_(?P<var>[A-Za-z0-9-]+)/`\".}.<`$2`><mo#sj><mo/ts#sf>.<`$2`><mo/ts#arg>\"request-queue-0000000-0000-0000-0000-000000000002\".<`$1`><mo/ts/msg#r_t>\"request-queue-0000000-0000-0000-0000-000000000002\". "
 	]
     }
-},
-
-{
-    "@" : "msg:Message_2",
-    "a" : "msg:Message",
-    "msg:sender" : "external_tester",
-    "msg:ticket" : "@local",
-    "msg:reciever" : "pacahon",
-    "msg:command" : "put",
-    "msg:args" :
-    {
-	"@" : "event:event_filter7",
-	"a" : "event:Event",
-	"event:to":"semargl",
-	"event:when":"after",
-	"event:autoremove":"no",
-	"event:subject_type":"docs:unit_card",
-	"event:condition": "docs:active == 'true'",
-	"event:msg_template" : 
-	[
-	 "<`$1`><mo#sj><mo#p>.<`$1`><mo/ts#arg>{<`docs:parentUnit/_(?P<var>[A-Za-z0-9-]+)/`><mo#hsPt>\"`@/_(?P<var>[A-Za-z0-9-]+)/`\".}.<`$2`><mo#sj><mo/ts#sf>.<`$2`><mo/ts#arg>\"request-queue-0000000-0000-0000-0000-000000000003\".<`$1`><mo/ts/msg#r_t>\"request-queue-0000000-0000-0000-0000-000000000003\". "
-	]
-    }
 }
+
 
 ]
 

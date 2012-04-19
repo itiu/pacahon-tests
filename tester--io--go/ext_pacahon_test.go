@@ -36,9 +36,9 @@ func main() {
 		io_file = flag.Arg(3)
 	}
 
-	var max_pull int = 10000
-	var messages_in [10000]string
-	var messages_out [10000]string
+	var max_pull int = 1
+	var messages_in [1]string
+	var messages_out [1]string
 	var cur_in_pull int = 0
 	//
 	var msg_in_et string
@@ -174,6 +174,8 @@ func main() {
 
 					}
 					line, err = r.ReadString('\r')
+//					fmt.Println("read line, len=", line)
+
 				}
 
 				fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
@@ -276,8 +278,10 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 					bb[len(msg_out_et)+1] = ']'
 					msg_out_et_array = bb
 				} else {
-					msg_out_et_array = []byte(msg_out_et)
+					msg_out_et_array = []byte(msg_out_et)					
 				}
+
+				fmt.Println("len=", len (msg_out_et_array));
 
 				var jsn_out_et []interface{}
 				err = json.Unmarshal(msg_out_et_array, &jsn_out_et)
@@ -394,6 +398,10 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 
 		case string:
 			if dd != vv {
+				if key_et == "@" && dd[0] == '_' {
+				    return true, is_level_down
+				}
+			
 				if trace {
 					fmt.Println(level, " ", key_et, ":", vv, " != ", dd)
 				}
@@ -461,8 +469,8 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 					if is_local_level_down == 1 && level > 0 {
 						fmt.Println(level, " ", key_et, " : et != cmp, ", v)
 						fmt.Println(level, " ", key_et, " => len (res):", len(dd), " != len (et):", len(vv))
-						
-						if len(dd) == 6000 {
+
+						if len(dd) == 6000 || len(dd) == 1000 {
 							fmt.Println("!!! len(dd) = ", len(dd))
 							return true, is_local_level_down
 						}

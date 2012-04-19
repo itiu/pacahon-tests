@@ -19,8 +19,9 @@ def main(name_test):
 
 
 #    addr = 'tcp://127.0.0.1:5555'
-#    addr = 'tcp://172.17.1.96:5560'
-    addr = 'tcp://127.0.0.1:5556'
+#    addr = 'tcp://172.17.1.141:5563'
+    addr = 'tcp://172.17.4.30:5556'
+#    addr = 'tcp://127.0.0.1:5560'
 
     f = open (name_test + "-in.json", 'r')
     msg_in = f.read ()

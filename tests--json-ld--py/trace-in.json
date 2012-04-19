@@ -7,7 +7,7 @@
 		"msg:command" : "set_message_trace",
 		"msg:args" :  
 	    {
-			"pacahon:on-trace-msg":"*"
+			"pacahon:on-trace-msg":["*"]
 	    }
 	
 	}
