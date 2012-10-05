@@ -1,0 +1,1 @@
+go build ExtPacahonTest-src/ExtPacahonTest.go

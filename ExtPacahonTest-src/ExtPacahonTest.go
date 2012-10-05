@@ -1,16 +1,17 @@
 package main
 
 import "fmt"
-import zmq "github.com/alecthomas/gozmq"
 import ioutil "io/ioutil"
 import "strings"
+import "io"
 import "os"
 import "bufio"
-import "json"
+import "encoding/json"
 import "log"
-import "time"
+import time "time"
 import "flag" // command line option parser
-import uuid "github.com/dchest/uuid.go"
+import uuid "github.com/serverhorror/uuid"
+import zmq "github.com/alecthomas/gozmq"
 
 type IOElement struct {
 	in_msg  string
@@ -43,9 +44,9 @@ func main() {
 	//
 	var msg_in_et string
 	var msg_out_et string
-	var prev_ct int64
-	var count int
-	var prev_count int
+	var prev_ct time.Time
+	var count int64
+	var prev_count int64
 
 	var cc [50]chan *IOElement
 	var cc_len int = 20
@@ -76,25 +77,21 @@ func main() {
 		// выбираем данные для тестирующих нитей 
 
 		for i := 0; i < len(ff); i++ {
-			if io_file == "" && strings.Contains(ff[i].Name, ".io") || io_file != "" && strings.Contains(ff[i].Name, io_file) {
+			if io_file == "" && strings.Contains(ff[i].Name(), ".io") || io_file != "" && strings.Contains(ff[i].Name(), io_file) {
 
-				log.Println("found io: ", ff[i].Name)
+				log.Println("found io: ", ff[i].Name())
 
-				f, err := os.Open(ff[i].Name)
+				f, err := os.Open(ff[i].Name())
 				if err != nil {
-					fmt.Printf("can't open file; err=%s\n", err.String())
+					fmt.Printf("can't open file; err=%s\n", err)
 					os.Exit(1)
 				}
 
 				defer f.Close()
 
-				r, err := bufio.NewReaderSize(f, 4*1024)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
+				r := bufio.NewReaderSize(f, 4*1024)
 
-				log.Println("read io: ", ff[i].Name)
+				log.Println("read io: ", ff[i].Name())
 
 				var io_type bool = true
 				cur_in_pull = 0
@@ -127,12 +124,13 @@ func main() {
 						}
 
 						if io_type == false {
-							ct := time.Nanoseconds()
 
-							delta := ((float32(ct - prev_ct)) / 1e9)
+							ct := time.Now()
 
-							if ct-prev_ct > 1e9 {
-								fmt.Println("count readed:", count, " cps:", (float32(count-prev_count))/delta)
+							delta := time.Now().Sub(prev_ct).Nanoseconds()
+
+							if delta > 1e9 {
+								fmt.Println("count readed:", count, " cps:", (count-prev_count)/delta)
 								prev_ct = ct
 								prev_count = count
 							}
@@ -196,7 +194,7 @@ func main() {
 
 				fmt.Println("file complete, count messages = ", cur_in_pull)
 
-				if err != os.EOF {
+				if err != io.EOF {
 					fmt.Println(err)
 					return
 				}
@@ -212,10 +210,10 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 	context, _ := zmq.NewContext()
 	socket, _ := context.NewSocket(zmq.REQ)
-	sock_uuid := uuid.New()
-	socket.SetSockOptString(zmq.IDENTITY, sock_uuid.String())
+	sock_uuid := uuid.UUID4()
+	socket.SetSockOptString(zmq.IDENTITY, sock_uuid)
 	socket.Connect(point)
-	println("sock_uuid: ", sock_uuid.String())
+	println("sock_uuid: ", sock_uuid)
 
 	ticket := get_ticket(socket, "user", "9cXsvbvu8=")
 
@@ -253,7 +251,7 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 		if jsn_msg != nil {
 
-			msg_out_cmp, err := send_and_recieve(socket, jsn_msg, sock_uuid.String())
+			msg_out_cmp, err := send_and_recieve(socket, jsn_msg, sock_uuid)
 
 			if compare_result == "Y" {
 				if msg_out_cmp == nil {
@@ -542,10 +540,10 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 }
 
 func get_ticket(socket zmq.Socket, login string, credential string) string {
-	msg_uuid := uuid.New()
+	msg_uuid := uuid.UUID4()
 
 	var msg string
-	msg = "{\n\"@\" : \"msg:M" + msg_uuid.String() + "\", \n\"a\" : \"msg:Message\",\n\"msg:sender\" : \"ext_pacahon_test\",\n\"msg:reciever\" : \"pacahon\",\n" + "\"msg:command\" : \"get_ticket\",\n" + "\"msg:args\" :\n" + "{\n" + "  \"auth:login\" : \"" + login + "\",\n  \"auth:credential\" : \"" + credential + "\"\n}\n}"
+	msg = "{\n\"@\" : \"msg:M" + msg_uuid + "\", \n\"a\" : \"msg:Message\",\n\"msg:sender\" : \"ext_pacahon_test\",\n\"msg:reciever\" : \"pacahon\",\n" + "\"msg:command\" : \"get_ticket\",\n" + "\"msg:args\" :\n" + "{\n" + "  \"auth:login\" : \"" + login + "\",\n  \"auth:credential\" : \"" + credential + "\"\n}\n}"
 
 	//socket.Send([]byte(msg), 0)
 	//res, err := socket.Recv(0)
@@ -575,12 +573,12 @@ func get_ticket(socket zmq.Socket, login string, credential string) string {
 	return "0000"
 }
 
-func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, err os.Error) {
+func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, err error) {
 	//		println("in_msg: ", string (in_msg))
 	//	println("send ", id)
 	var repeat bool
 	var r0 []byte
-	var err0 os.Error
+	var err0 error
 
 	repeat = true
 

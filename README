@@ -1,14 +1,17 @@
 утилиты для внешнего тестирования агента pacahon
 
-ext_pacahon_test : утилита для многопоточного тестирования pacahon
+***
+
+ext_pacahon_test : утилита для многопоточного тестирования pacahon (go1.0.3)
     требует: zmq, gozmq
-	goinstall github.com/dchest/uuid.go
-	goinstall github.com/alecthomas/gozmq
-	
-    сборка: make
+
+	go get github.com/serverhorror/uuid
+	go get github.com/alecthomas/gozmq
+
+    сборка: make ExtPacahonTest.sh
 
 
-
+***
 
 tests--json-ld--py : набор тестов на питоне
     требует: python, zmq, pyzmq
