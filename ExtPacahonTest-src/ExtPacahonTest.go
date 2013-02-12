@@ -37,9 +37,11 @@ func main() {
 		io_file = flag.Arg(3)
 	}
 
-	var max_pull int = 1
-	var messages_in [1]string
-	var messages_out [1]string
+	var max_pull int = 1000
+
+	messages_in := make([]string, max_pull)
+	messages_out := make([]string, max_pull)
+
 	var cur_in_pull int = 0
 	//
 	var msg_in_et string
@@ -48,8 +50,8 @@ func main() {
 	var count int64
 	var prev_count int64
 
-	var cc [50]chan *IOElement
-	var cc_len int = 20
+	var test_chanel_len int = 20
+	test_chanel := make([]chan *IOElement, test_chanel_len)
 
 	fout, err := os.OpenFile("logfile", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -65,13 +67,13 @@ func main() {
 	if ff != nil {
 
 		if multi_thread != "Y" {
-			cc_len = 1
+			test_chanel_len = 1
 		}
 
 		// стартуем тестирующие нити
-		for i := 0; i < cc_len; i++ {
-			cc[i] = make(chan *IOElement)
-			go ggg(cc[i], point, compare_result)
+		for i := 0; i < test_chanel_len; i++ {
+			test_chanel[i] = make(chan *IOElement)
+			go ggg(test_chanel[i], point, compare_result)
 		}
 
 		// выбираем данные для тестирующих нитей 
@@ -136,34 +138,33 @@ func main() {
 							}
 
 							//							log.Println("msg to pull")
+							// Если msg_in_et содержит команду изменяющую базу данных
+							// то закончим формирование пула 
+							var pull_is_ready bool = false
+
+							pos = strings.Index(msg_in_et, "\"msg:command\" : \"get\"")
+							if pos < 0 {
+								pos = strings.Index(msg_in_et, "\"msg:command\" : \"get_ticket\"")
+								if pos < 0 {
+									pos = strings.Index(msg_in_et, "\"msg:command\" : \"remove\"")
+								}
+							}
+
+							if cur_in_pull >= max_pull || pos > 0 {
+								pull_is_ready = true
+							}
+
+							if pull_is_ready == true {
+								send_packet(messages_in, messages_out, cur_in_pull, test_chanel, test_chanel_len)
+								cur_in_pull = 0
+							}
 
 							messages_in[cur_in_pull] = msg_in_et
 							messages_out[cur_in_pull] = msg_out_et
 							cur_in_pull++
-							if cur_in_pull >= max_pull {
-								fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
-
-								var j int
-								for i := 0; i < max_pull; i++ {
-									var io_el IOElement
-									io_el.in_msg = messages_in[i]
-									io_el.out_msg = messages_out[i]
-
-									cc[j] <- &io_el
-
-									j++
-									if j >= cc_len {
-										j = 0
-									}
-								}
-
-								cur_in_pull = 0
-							}
 
 							//							fmt.Println("msg_in_et ", msg_in_et)
 							//							fmt.Println("msg_in_et ", msg_out_et)
-							//							c <- &io_el
-
 							//							fmt.Println("count ", count)
 
 							count++
@@ -172,25 +173,14 @@ func main() {
 
 					}
 					line, err = r.ReadString('\r')
-//					fmt.Println("read line, len=", line)
+					//					//fmt.Println("read line, len=", line)
 
 				}
 
-				fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
+				//				fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
 
-				var j int
-				for i := 0; i <= cur_in_pull; i++ {
-					var io_el IOElement
-					io_el.in_msg = messages_in[i]
-					io_el.out_msg = messages_out[i]
-
-					cc[j] <- &io_el
-
-					j++
-					if j >= cc_len {
-						j = 0
-					}
-				}
+				// отправим остаток на тестирование
+				send_packet(messages_in, messages_out, cur_in_pull, test_chanel, test_chanel_len)
 
 				fmt.Println("file complete, count messages = ", cur_in_pull)
 
@@ -204,6 +194,27 @@ func main() {
 	}
 
 	//	time.Sleep(1000 * 60 * 1e9)
+}
+
+func send_packet(messages_in []string, messages_out []string, pull_size int, test_chanel []chan *IOElement, test_chanel_len int) {
+	// пулл подготовлен, отправляем пачку messages_in[] messages_out[] паралельно во все тестирующие каналы 
+
+	//fmt.Println("piuuu, cur_in_pull=", cur_in_pull, " max_pull=", max_pull)
+
+	var j int
+	for i := 0; i < pull_size; i++ {
+		var io_el IOElement
+		io_el.in_msg = messages_in[i]
+		io_el.out_msg = messages_out[i]
+
+		test_chanel[j] <- &io_el
+
+		j++
+		if j >= test_chanel_len {
+			j = 0
+		}
+	}
+
 }
 
 func ggg(c chan *IOElement, point string, compare_result string) {
@@ -276,10 +287,10 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 					bb[len(msg_out_et)+1] = ']'
 					msg_out_et_array = bb
 				} else {
-					msg_out_et_array = []byte(msg_out_et)					
+					msg_out_et_array = []byte(msg_out_et)
 				}
 
-				fmt.Println("len=", len (msg_out_et_array));
+				//fmt.Println("len=", len (msg_out_et_array));
 
 				var jsn_out_et []interface{}
 				err = json.Unmarshal(msg_out_et_array, &jsn_out_et)
@@ -345,6 +356,7 @@ func ggg(c chan *IOElement, point string, compare_result string) {
 
 func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_cmp interface{}, level int, trace bool) (bool, int) {
 
+	trace = false
 	//	if trace {
 	//		fmt.Println(level, "cmp_msg_out, key_cmp=", key_cmp)
 	//	}
@@ -397,9 +409,9 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 		case string:
 			if dd != vv {
 				if key_et == "@" && dd[0] == '_' {
-				    return true, is_level_down
+					return true, is_level_down
 				}
-			
+
 				if trace {
 					fmt.Println(level, " ", key_et, ":", vv, " != ", dd)
 				}
@@ -465,8 +477,8 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 
 				if is_found == false {
 					if is_local_level_down == 1 && level > 0 {
-						fmt.Println(level, " ", key_et, " : et != cmp, ", v)
-						fmt.Println(level, " ", key_et, " => len (res):", len(dd), " != len (et):", len(vv))
+						//fmt.Println(level, " ", key_et, " : et != cmp, ", v)
+						//fmt.Println(level, " ", key_et, " => len (res):", len(dd), " != len (et):", len(vv))
 
 						if len(dd) == 6000 || len(dd) == 1000 {
 							fmt.Println("!!! len(dd) = ", len(dd))
@@ -485,7 +497,7 @@ func cmp_msg_out(key_et string, msg_out_et interface{}, key_cmp string, msg_out_
 			//			}
 
 			if len(dd) != len(vv) {
-				fmt.Println(level, " ", key_et, " => len (res):", len(dd), " != len (et):", len(vv))
+				//fmt.Println(level, " ", key_et, " => len (res):", len(dd), " != len (et):", len(vv))
 				return false, is_level_down
 			}
 
@@ -600,6 +612,7 @@ func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, 
 	//			println("out_msg: ", string (r0))
 	return r0, err0
 }
+
 /*
 func send_and_recieve(socket zmq.Socket, in_msg []byte, id string) (res []byte, err os.Error) {
 
